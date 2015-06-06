@@ -59,7 +59,7 @@
       </li>
       <li>
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -283,6 +283,16 @@
           Object Relational Mappers
         </a>
       </li>
+      <li>
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -315,6 +325,11 @@
           Sinatra Resource
         </a>
       </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
+        </a>
+      </li>
     </ul>
   </li>
 </ul>
@@ -327,14 +342,14 @@
 
 <p>Consider an application that relies on lots and lots of gems:</p>
 
-<p>For example, a new, generated Rails application comes with a whopping 42 gems,
+<p>For example, a newly generated Rails application comes with a whopping 42 gems,
 and this number usually grows pretty quickly with typical Rails applications.
 The application <a href="http://speakerinnen.org/">Speakerinnen Liste</a>, at the time of this writing, installs no less than 138 gems. Only 40 of these
-are defined in their <a href="https://github.com/rubymonsters/speakerinnen_liste/blob/master/Gemfile">Gemfile</a>,
-which are the ones that provide certain features used by the application. All
-the other 98 gems are dependencies that these 40 gems have.</p>
+are defined in the Speakerinnen <a href="https://github.com/rubymonsters/speakerinnen_liste/blob/master/Gemfile">Gemfile</a>,
+which are the ones that provide certain features used by the application.
+The other 98 gems are dependencies that these 40 gems have.</p>
 
-<p>Now, imagine working on an application like this over years, and there are new
+<p>Now, imagine working on an application like this over years. There are new
 versions of gems being published all the time. Often they&rsquo;ll update the version
 numbers of their dependencies when new versions come out, or add new gems as
 dependencies, and remove old ones.</p>
@@ -349,7 +364,7 @@ of certain gems play well with each other.</p>
 code, you&rsquo;ll simply get the latest version of this gem that is already installed
 on your computer. Assuming these versions do not conflict with each other, you
 still don&rsquo;t know if these are the exact same versions as the ones your
-co-workers have installed. And in practice, again, this is pretty unlikely.</p>
+co-workers have installed. Again, in practice this is pretty unlikely.</p>
 
 <p>All of this means that maintaining the right versions of the right gems on
 your system manually would be a sheer nightmare. And if you get it wrong then
@@ -359,9 +374,9 @@ deal with.</p>
 <p>And that&rsquo;s where Bundler comes to the rescue:</p>
 
 <p>Bundler allows you to define which gems your application depends on (in a file
-called <code>Gemfile</code>, here&rsquo;s the one we&rsquo;re using for
-<a href="https://github.com/rubymonsters/ruby-for-beginners/blob/master/Gemfile">this book</a>),
-and then run <code>bundle install</code>. This will figure out which
+called <code>Gemfile</code>. Here&rsquo;s the one we&rsquo;re using for
+<a href="https://github.com/rubymonsters/ruby-for-beginners/blob/master/Gemfile">this book</a>).
+When we run <code>bundle install</code>, this will figure out which
 gem versions work well with each other (a task that Bundler is <em>great</em> at), and
 store the solution to this riddle to a separate file (called <code>Gemfile.lock</code>).</p>
 
@@ -369,7 +384,7 @@ store the solution to this riddle to a separate file (called <code>Gemfile.lock<
 with other developers. When they download your code, and run <code>bundle install</code>
 themselves, they&rsquo;ll get exactly the same gem versions that you also have.</p>
 
-<p>You can think of Rubygems of a tool to install gems on your computer. Over time
+<p>You can think of Rubygems as a tool to install gems on your computer. Over time
 this may result in a collection of lots and lots of gems in various versions
 that all sit somewhere on your filesystem.</p>
 
@@ -379,14 +394,14 @@ few gems that your application really should use. Like a looking glass that
 restricts the vision of your application to only see these few gem versions,
 even though there maybe tons of other gem versions installed on your computer.</p>
 
-<p>In order to use your application with Bundler you&rsquo;d prepend the command <code>bundle
+<p>In order to use your application with Bundler, you&rsquo;d prepend the command <code>bundle
 exec</code> to whatever other command you execute in your terminal. Imagine you&rsquo;d
 normally execute your program like this:</p>
 <pre class="highlight plaintext"><code>ruby my_amazing_app.rb
 </code></pre>
 
-<p>In order to use it with Bundler, and restrict the visible gem versions to the
-ones defined in your <code>Gemfile.lock</code> file you would run this instead:</p>
+<p>In order to use it with Bundler and restrict the visible gem versions to the
+ones defined in your <code>Gemfile.lock</code> file, you would run this instead:</p>
 <pre class="highlight plaintext"><code>bundle exec ruby my_amazing_app.rb
 </code></pre>
 

@@ -59,7 +59,7 @@
       </li>
       <li>
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -283,6 +283,16 @@
           Object Relational Mappers
         </a>
       </li>
+      <li>
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -313,6 +323,11 @@
       <li>
         <a href="/exercises/sinatra_resource.html">
           Sinatra Resource
+        </a>
+      </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
         </a>
       </li>
     </ul>
@@ -365,6 +380,13 @@ it could look like this:</p>
 The <code>name</code> column is a <code>string</code> (databases call it this type a <code>varchar</code>), and
 the <code>joined_on</code> column is a <code>date</code>.</p>
 
+<p>For a table like this, the columns (with their name and type) are referred to
+as the database <em>structure</em>, whereas the rows represent the <em>data</em> that we
+store.  Rows change all the time: new members sign up, existing members change
+their details, or remove their profile etc. The structure remains the same,
+unless we, as developers, need another column, or table in order to store more
+data.</p>
+
 <p>Databases usually contain many tables. And often data from one table relates
 to data in other tables.</p>
 
@@ -405,7 +427,28 @@ message.</p>
 in this example, Anja has posted two status updates, Rebecca one, and Carla
 hasn&rsquo;t posted yet.</p>
 
-<p>Now, how can we add data to a table, or retrieve it?</p>
+<p>If you think at the two columns <code>id</code> and <code>member_id</code> you notice that the column
+<code>id</code> is special: It must never contain duplicate values, because we want to use
+the <code>id</code> to identify a certain message (or member). This is called a <em>primary
+key</em>, and the column is called a unique one. Also, it usually auto-increments
+the id for us: Whenever we store a new row to this table then the database will
+assign an id, make sure we get the next number, and never get duplicate values.</p>
+
+<p>These &ldquo;features&rdquo;, or special properties of the <code>id</code> column also are considered
+part of the structure, alongside with the column name and type: we define
+these things when we create or modify the database structure.</p>
+
+<p>The column <code>member_id</code> on the other hand should not be unique: We want to be
+able to store many messages that all belong to the same member row, in the
+<code>members</code> table. Therefor we need to be able to have multiple rows with the
+same <code>member_id</code> in the <code>messages</code> table.</p>
+
+<p>Does that make sense? This is how we can store data in a database, give it a
+certain structure, and relate a piece of data (a row) in one table to data
+(rows) in other tables.</p>
+
+<p>Now, how can we talk to a database like this? How can we actually add data to a
+table, or retrieve it?</p>
 
         <nav class="page-nav"><a class="prev" href="/databases.html">
   Previous

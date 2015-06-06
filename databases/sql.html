@@ -59,7 +59,7 @@
       </li>
       <li>
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -283,6 +283,16 @@
           Object Relational Mappers
         </a>
       </li>
+      <li>
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -315,6 +325,11 @@
           Sinatra Resource
         </a>
       </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
+        </a>
+      </li>
     </ul>
   </li>
 </ul>
@@ -323,9 +338,14 @@
         <nav class="menu"><a href="#"></a></nav>
         <h1>SQL</h1>
 
-<p>SQL (Structured Query Language) is a language that (relational) databases
-support, and that allows us to ask (query) the database to retrieve certain
-information from tables.</p>
+<p><em>Talk to databases</em></p>
+
+<p>Using SQL (Structured Query Language) we can talk to (relational) databases.</p>
+
+<p>For example we can ask (query) the database to retrieve certain bits of
+information from tables, or we can insert, update or delete data. And SQL is
+also the language that is used to define the database structure in the first
+place.</p>
 
 <p>SQL was invented in the 1970s, and it&rsquo;s quite ugly to look at. However, lots
 of database systems support it, and so it&rsquo;s quite common to use SQL in web
@@ -336,7 +356,7 @@ table like this:</p>
 <pre class="highlight sql"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">members</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </code></pre>
 
-<p>The statement <code>SELECT</code> tells the database that we&rsquo;d like to retrieve data (as
+<p>The statement <code>SELECT</code> tells the database that we&rsquo;d like to <em>retrieve</em> data (as
 opposed to, for example, <code>INSERT</code> which inserts a new row, or <code>UPDATE</code> which
 updates an existing row). The star <code>*</code> means &ldquo;all fields&rdquo;. <code>FROM</code> specifies the
 table that we want to look at, and <code>WHERE</code> specifies a condition that this row
@@ -357,9 +377,20 @@ we&rsquo;d get back two rows:</p>
 2 | Carla | 2013-06-24
 </code></pre>
 
+<p>Instead of asking for all fields per row, we could also just ask for a certain
+column that we are interested in:</p>
+<pre class="highlight sql"><code><span class="k">SELECT</span> <span class="n">name</span> <span class="k">FROM</span> <span class="n">members</span> <span class="k">WHERE</span> <span class="n">joined_on</span> <span class="o">=</span> <span class="s1">'2013-06-24'</span><span class="p">;</span>
+</code></pre>
+
+<p>This would return just the names:</p>
+<pre class="highlight plaintext"><code>Anja
+Carla
+</code></pre>
+
 <p>In order to insert a new row to the table we could use an SQL statement like
-this:</p>
-<pre class="highlight sql"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">members</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">joined_at</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Maren'</span><span class="p">,</span> <span class="s1">'2013-06-24'</span><span class="p">);</span>
+this (assumning our <code>id</code> column auto-increments, i.e. automatically assigns
+the next number to the new row):</p>
+<pre class="highlight sql"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">members</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">joined_at</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">'Maren'</span><span class="p">,</span> <span class="s1">'2013-06-24'</span><span class="p">);</span>
 </code></pre>
 
 <p>Updating looks like this:</p>
@@ -374,6 +405,13 @@ this:</p>
 command, naming the table, and ending with a semicolon. However, they also don&rsquo;t
 really look very consistent. For example, why does the <code>INSERT</code> statement separate
 the column names and inserted values, while the <code>UPDATE</code> statement pairs them?</p>
+
+<p>On the other hand, even though it&rsquo;s a little weird, it&rsquo;s also a very powerful
+language, and being able to figure out some SQL and manually writing it can be
+very useful when you have access to a database, and you want to find out some
+bits of information that cannot be retrieved with the application that is using
+the database: You&rsquo;d just directly talk to the database, and ask it for the
+information you need.</p>
 
         <nav class="page-nav"><a class="prev" href="/databases/tables.html">
   Previous

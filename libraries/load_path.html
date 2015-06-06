@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Ruby Load Path | Webapps for Beginners</title>
+    <title>Ruby load path | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
@@ -59,7 +59,7 @@
       </li>
       <li class="active">
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -283,6 +283,16 @@
           Object Relational Mappers
         </a>
       </li>
+      <li>
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -315,13 +325,18 @@
           Sinatra Resource
         </a>
       </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
+        </a>
+      </li>
     </ul>
   </li>
 </ul>
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Ruby Load Path</h1>
+        <h1>Ruby load path</h1>
 
 <p><em>Where to look for all the things</em></p>
 
@@ -329,7 +344,7 @@
 In order to define places on your computer where interesting stuff is stored,
 software often has the concept of a &ldquo;load path&rdquo;.</p>
 
-<p>If you are using a Unix based operating system, such as Linux or Mac OSX you
+<p>If you are using a Unix based operating system such as Linux or Mac OS X, you
 may have seen the environment variable <code>$PATH</code> in installation instructions.
 This variable defines all the directories where executable files are stored.</p>
 
@@ -355,7 +370,7 @@ Ruby installation like this:</p>
 <p>The <code>-e</code> flag is a way to run some Ruby code without having to store it in
 a file.</p>
 
-<p>For me this prints:</p>
+<p>For me, this prints:</p>
 <pre class="highlight plaintext"><code>/Users/sven/.rbenv/versions/2.2.1/lib/ruby/site_ruby/2.2.0
 /Users/sven/.rbenv/versions/2.2.1/lib/ruby/site_ruby/2.2.0/x86_64-darwin14
 /Users/sven/.rbenv/versions/2.2.1/lib/ruby/site_ruby
@@ -368,7 +383,7 @@ a file.</p>
 
 <p>From this you can see that I am using <a href="https://github.com/sstephenson/rbenv">rbenv</a>
 to manage my Ruby versions, that my currently active Ruby version is <code>2.2.1</code>,
-and that I am running this on Mac OSX (&ldquo;darwin&rdquo;).  All these paths are
+and that I am running this on Mac OS X (&ldquo;darwin&rdquo;).  All these paths are
 directories somewhere in the directory where Ruby 2.2.1 is installed on my
 computer.</p>
 

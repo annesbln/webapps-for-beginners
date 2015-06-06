@@ -19,7 +19,7 @@
     <nav class="page-nav"><a class="prev" href="/databases/sql.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/exercises.html">
+    <nav class="page-nav"><a class="next" href="/databases/sqlite.html">
   Next
 </a></nav>
 
@@ -59,7 +59,7 @@
       </li>
       <li>
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -283,6 +283,16 @@
           Object Relational Mappers
         </a>
       </li>
+      <li>
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -315,6 +325,11 @@
           Sinatra Resource
         </a>
       </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
+        </a>
+      </li>
     </ul>
   </li>
 </ul>
@@ -324,18 +339,86 @@
         <h1>Object Relational Mappers</h1>
 
 <p>There are lots of reasons, most of them historical, why SQL reads weird, and
-it&rsquo;s quite unlikely that SQL will be come a more pleasant language, or replaced
+it&rsquo;s quite unlikely that SQL will become a more pleasant language, or replaced
 anytime soon.</p>
 
 <p>For this reason programmers have written lots, and lots of tools (libraries)
-that make talking to, and working with the database a little bit more easy.</p>
+that make talking to, and working with relations databases a little bit more
+easy.</p>
 
 <p>One class of such tools is called ORM: <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mappers</a>.</p>
 
 <p>An ORM is a library that &ldquo;maps&rdquo; data, stored in a database, to objects, and
-usually has methods such as <code>save</code>, in order to save an object, <code>create</code>,
-<code>update</code>, and so on. In other words, they often also provide a
-<a href="../sinatra/dsl.html">DSL</a> for working with the database.</p>
+usually has methods such as <code>save</code>, in order to save an object as a database
+row, <code>create</code> to insert new data, <code>update</code> to change it, and so on. In other
+words, they usually provide a <a href="../sinatra/dsl.html">DSL</a> for working with the
+database.</p>
+
+<p>Your data is stored in the database as rows, because that&rsquo;s what databases
+do. However in your Ruby application (or whatever language you use for this)
+you would see, and use this data as objects: because that&rsquo;s what Ruby is
+great at. The ORM is a tool that transforms your database data to Ruby
+objects and vice versa.</p>
+
+<p>Does that make sense?</p>
+
+<p>Let&rsquo;s look at an example.</p>
+
+<p>If we have a database table <code>members</code> like this:</p>
+
+<table><thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>joined_on</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>Anja</td>
+<td>2013-06-24</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Carla</td>
+<td>2013-06-24</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Rebecca</td>
+<td>2013-06-31</td>
+</tr>
+</tbody></table>
+
+<p>Then in our Ruby code, using an ORM, we could communicate with it like so:</p>
+<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Member</span> <span class="c1"># we'd need to somehow include the ORM functionality</span>
+<span class="k">end</span>
+
+<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
+
+<span class="n">member</span><span class="p">.</span><span class="nf">joined_at</span> <span class="o">=</span> <span class="s1">'2013-06-23'</span>
+<span class="n">member</span><span class="p">.</span><span class="nf">save</span>
+
+<span class="nb">puts</span> <span class="s2">"Correction!"</span>
+
+<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
+</code></pre>
+
+<p>And this would output:</p>
+<pre class="highlight plaintext"><code>Anja has joined on 2013-06-24.
+Correction!
+Anja has joined on 2013-06-23.
+</code></pre>
+
+<p>Of course the details of this Ruby code might vary, depending on the concrete
+ORM tool that we are using. But the basic idea is that we can use Ruby classes
+and objects to retrieve some data from the database (as in <code>Member.where(id:
+1)</code>), which would then appear in our application as a normal Ruby object. We
+can call methods to look up fields (such as in <code>member.name</code>, which returns the
+value from the <code>name</code> column).  And we can use the same object to modify, and
+save the data back to the database.</p>
 
 <p>Two widely used ORMs in Ruby are <a href="https://github.com/rails/rails/tree/master/activerecord">ActiveRecord</a>,
 which is part of Rails, and <a href="https://github.com/jeremyevans/sequel">Sequel</a>,
@@ -344,14 +427,14 @@ which is more modern, slick, and performant.</p>
 <p>Since you&rsquo;ll get to know ActiveRecord when you learn Rails anyway we&rsquo;ll
 introduce Sequel first so you get to know two libraries, and can compare them.</p>
 
-<p>Install the Sequel gem like so:</p>
+<p>You can install the Sequel gem like so:</p>
 <pre class="highlight plaintext"><code>$ gem install sequel
 </code></pre>
 
         <nav class="page-nav"><a class="prev" href="/databases/sql.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/exercises.html">
+        <nav class="page-nav"><a class="next" href="/databases/sqlite.html">
   Next
 </a></nav>
       </article>

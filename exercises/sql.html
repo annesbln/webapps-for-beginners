@@ -10,18 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>ERB Templates | Webapps for Beginners</title>
+    <title>SQL | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/erb.html">
+    <nav class="page-nav"><a class="prev" href="/exercises/sinatra_resource.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/erb/rendering_erb.html">
-  Next
-</a></nav>
+    <nav class="page-nav"></nav>
 
     <div>
       <nav class="toc">
@@ -69,12 +67,12 @@
       HTML
     </a>
   </li>
-  <li class="directory expanded">
+  <li class="directory">
     <a href="/erb.html">
       Embedded Ruby
     </a>
     <ul>
-      <li class="active">
+      <li>
         <a href="/erb/erb_templates.html">
           ERB Templates
         </a>
@@ -295,7 +293,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory">
+  <li class="directory expanded">
     <a href="/exercises.html">
       Exercises
     </a>
@@ -325,7 +323,7 @@
           Sinatra Resource
         </a>
       </li>
-      <li>
+      <li class="active">
         <a href="/exercises/sql.html">
           SQL
         </a>
@@ -336,63 +334,12 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>ERB Templates</h1>
+        <h1>SQL</h1>
 
-<p>The main idea behind ERB is to embed some Ruby code <em>into</em> an HTML document
-(also called a template). <a href="#footnote-1">[1]</a></p>
-
-<p>Here&rsquo;s an example:</p>
-<pre class="highlight erb"><code><span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;h1&gt;</span>Messages for <span class="cp">&lt;%=</span> <span class="nb">name</span> <span class="cp">%&gt;</span><span class="nt">&lt;/h1&gt;</span>
-    <span class="nt">&lt;ul&gt;</span>
-      <span class="cp">&lt;%</span> <span class="n">messages</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">message</span><span class="o">|</span> <span class="cp">%&gt;</span>
-        <span class="nt">&lt;li&gt;</span><span class="cp">&lt;%=</span> <span class="n">message</span> <span class="cp">%&gt;</span><span class="nt">&lt;/li&gt;</span>
-      <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
-    <span class="nt">&lt;/ul&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre>
-
-<p>Can you guess what this means?</p>
-
-<p>Everything inside the so called ERB tags <code>&lt;% ... %&gt;</code> is considered Ruby code.
-Everything outside of them is just some static text, in our case HTML code,
-into which the results of the Ruby code will be embedded whenever the ERB tag
-also has an equals sign, as in <code>&lt;%= ... %&gt;</code>.</p>
-
-<p>Imagine stripping everything outside the ERB tags, and the opening and closing
-tags themselves from the code above. And imagine replacing the <code>=</code> equals sign
-with <code>puts</code> statements. You&rsquo;d then end up with this code:</p>
-<pre class="highlight ruby"><code><span class="nb">puts</span> <span class="nb">name</span>
-
-<span class="n">messages</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">message</span><span class="o">|</span>
-  <span class="nb">puts</span> <span class="n">message</span>
-<span class="k">end</span>
-</code></pre>
-
-<p>That&rsquo;s some code you understand, right?</p>
-
-<p>ERB, when executed, does exactly this, except that <code>=</code> as part of the ERB tag
-<code>&lt;%= ... %&gt;</code> will not output things to the terminal, but capture it, and insert
-it to the surounding text (HTML code, in our case) in place of this tag.</p>
-
-<p>Ruby code in ERB tags that do not have an equal sign, such as <code>&lt;% ... %&gt;</code> will
-be executed, but any return values won&rsquo;t be captured, and just discarded.</p>
-
-<p>Footnotes:</p>
-
-<p><a name="footnote-1">[1]</a>
-<em>This idea actually predates Ruby&rsquo;s ERB library and
-became popular with PHP, a language that originally was meant to be used
-exactly this way: by embedding some code into an HTML template file.</em></p>
-
-        <nav class="page-nav"><a class="prev" href="/erb.html">
+        <nav class="page-nav"><a class="prev" href="/exercises/sinatra_resource.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/erb/rendering_erb.html">
-  Next
-</a></nav>
+        <nav class="page-nav"></nav>
       </article>
     </div>
 

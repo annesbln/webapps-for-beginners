@@ -16,8 +16,12 @@
   </head>
 
   <body>
-    <nav class="page-nav"></nav>
-    <nav class="page-nav"></nav>
+    <nav class="page-nav"><a class="prev" href="/databases/orm.html">
+  Previous
+</a></nav>
+    <nav class="page-nav"><a class="next" href="/databases/migrations.html">
+  Next
+</a></nav>
 
     <div>
       <nav class="toc">
@@ -55,7 +59,7 @@
       </li>
       <li>
         <a href="/libraries/load_path.html">
-          Ruby Load Path
+          Ruby load path
         </a>
       </li>
     </ul>
@@ -259,7 +263,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory">
+  <li class="directory expanded">
     <a href="/databases.html">
       Databases
     </a>
@@ -277,6 +281,16 @@
       <li>
         <a href="/databases/orm.html">
           Object Relational Mappers
+        </a>
+      </li>
+      <li class="active">
+        <a href="/databases/sqlite.html">
+          SQLite
+        </a>
+      </li>
+      <li>
+        <a href="/databases/migrations.html">
+          Migrations
         </a>
       </li>
     </ul>
@@ -311,6 +325,11 @@
           Sinatra Resource
         </a>
       </li>
+      <li>
+        <a href="/exercises/sql.html">
+          SQL
+        </a>
+      </li>
     </ul>
   </li>
 </ul>
@@ -319,23 +338,92 @@
         <nav class="menu"><a href="#"></a></nav>
         <h1>SQLite</h1>
 
-<p>SQLite is a minimalistic implementation of a relational database that supports
-most of SQL, although not all of it. It is less powerful than, for example,
-PostgreSQL and MySQL, but it&rsquo;s also super lightweight, and great for learning,
-experiments, and getting started quickly.</p>
+<p><a href="http://en.wikipedia.org/wiki/SQLite">SQLite</a> is a minimalistic implementation
+of a relational database that supports most of SQL, although not all of it. It
+is less powerful than, for example, <a href="http://en.wikipedia.org/wiki/PostgreSQL">PostgreSQL</a> and
+<a href="http://en.wikipedia.org/wiki/MySQL">MySQL</a>, but it&rsquo;s also super lightweight,
+and great for learning, experiments, and getting started quickly.</p>
 
-<p>We are going to use the database SQLite in our examples, so you may want to
-make sure you have it installed.</p>
+<p>We are going to use the database SQLite in our examples, because it&rsquo;s the least
+hassle to set it up. So you want to make sure you have it installed, many
+operating systems have it preinstalled.</p>
 
 <p>Check if it&rsquo;s installed by running this in your terminal:</p>
 <pre class="highlight plaintext"><code>$ sqlite3 --version
 </code></pre>
 
-<p>If that outputs a version then SQLite is installed. If it&rsquo;s not, Mislav has
-written up nice instructions <a href="http://mislav.uniqpath.com/rails/install-sqlite3/">over here</a>.</p>
+<p>If that outputs a version string then SQLite is installed. If it&rsquo;s not then
+you&rsquo;ll see something like <code>command not found: sqlite3</code>. In that case Mislav has
+written up some nice instructions <a href="http://mislav.uniqpath.com/rails/install-sqlite3/">over here</a>.</p>
 
-        <nav class="page-nav"></nav>
-        <nav class="page-nav"></nav>
+<p>SQLite comes with a handy command line tool that one can use to create
+databases and interact with them. It also has an interactive
+<a href="http://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">shell</a>:
+Just like with <a href="http://ruby-for-beginners.rubymonstas.org/your_tools/irb.html">IRB</a>
+(where we can execute Ruby code interactively) we can log into the SQLite
+database, and execute <a href="sql.html">SQL</a> statements interactively.</p>
+
+<p>Let&rsquo;s try it:</p>
+<pre class="highlight plaintext"><code>$ sqlite3 members
+</code></pre>
+
+<p>This should put you into the interactive SQLite shell, and look something
+like this:</p>
+<pre class="highlight plaintext"><code>SQLite version 3.8.5 2014-08-15 22:37:57
+Enter ".help" for usage hints.
+sqlite&gt;
+</code></pre>
+
+<p>The prompt <code>sqlite&gt;</code> waits for your input. If you type an SQL command and hit
+return it will execute it.</p>
+
+<p>Let&rsquo;s create our <code>members</code> table:</p>
+<pre class="highlight plaintext"><code>sqlite&gt; CREATE TABLE members (id INTEGER PRIMARY KEY, name VARCHAR(255), joined_on DATE);
+</code></pre>
+
+<p>If this does not output an error, then the command was successful.</p>
+
+<p>The command says that we&rsquo;d like to create a table <code>member</code> with 3 columns <code>id</code>,
+<code>name</code>, and <code>joined_on</code>. The column <code>id</code> is supposed to be an integer column,
+and we&rsquo;d like to use it as our primary key (meaning that it will be unique, and
+it will autoincrement the id for us). The column <code>name</code> is a string column, and
+values can be 255 characters long. And <code>joined_at</code> is a date column.</p>
+
+<p>Cool. So we&rsquo;ve just created a table in our database.</p>
+
+<p>We can list our tables like so:</p>
+<pre class="highlight plaintext"><code>sqlite&gt; .tables
+members
+</code></pre>
+
+<p>And we can check the structure (schema) of our <code>members</code> table like so:</p>
+<pre class="highlight plaintext"><code>sqlite&gt; .schema members
+CREATE TABLE members (id INTEGER PRIMARY KEY, name VARCHAR(255), joined_on DATE);
+</code></pre>
+
+<p>Nice.</p>
+
+<p>Now let&rsquo;s insert a row to the table:</p>
+<pre class="highlight plaintext"><code>sqlite&gt; INSERT INTO members(name, joined_on) VALUES('Anja', '2013-06-24');
+</code></pre>
+
+<p>Again, if this does not output anything, that means our command was successful.</p>
+
+<p>We can now retrieve the data using a <code>SELECT</code> statement like so:</p>
+<pre class="highlight plaintext"><code>sqlite&gt; SELECT * FROM members;
+1|Anja|2013-06-24
+</code></pre>
+
+<p>So this displays on row.</p>
+
+<p>Now should be a good time to do some <a href="../exercises/sql.html">exercises on SQL</a>.</p>
+
+        <nav class="page-nav"><a class="prev" href="/databases/orm.html">
+  Previous
+</a></nav>
+        <nav class="page-nav"><a class="next" href="/databases/migrations.html">
+  Next
+</a></nav>
       </article>
     </div>
 
