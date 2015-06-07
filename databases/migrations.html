@@ -16,7 +16,7 @@
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/databases/sqlite.html">
+    <nav class="page-nav"><a class="prev" href="/databases/orm.html">
   Previous
 </a></nav>
     <nav class="page-nav"><a class="next" href="/exercises.html">
@@ -279,13 +279,13 @@
         </a>
       </li>
       <li>
-        <a href="/databases/orm.html">
-          Object Relational Mappers
+        <a href="/databases/sqlite.html">
+          SQLite
         </a>
       </li>
       <li>
-        <a href="/databases/sqlite.html">
-          SQLite
+        <a href="/databases/orm.html">
+          Object Relational Mappers
         </a>
       </li>
       <li class="active">
@@ -500,8 +500,8 @@ readable Ruby code instead.</p>
   <span class="n">up</span> <span class="k">do</span>
     <span class="n">create_table</span><span class="p">(</span><span class="ss">:members</span><span class="p">)</span> <span class="k">do</span>
       <span class="n">primary_key</span> <span class="ss">:id</span>
-      <span class="no">String</span> <span class="ss">:name</span>
-      <span class="no">DateTime</span> <span class="ss">:joined_at</span>
+      <span class="n">string</span> <span class="ss">:name</span>
+      <span class="n">datetime</span> <span class="ss">:joined_at</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
@@ -542,7 +542,7 @@ and let us describe changes in the same Ruby code no matter what.</p>
 making sense as soon as you use migrations in praxis, in order to create
 tables, and then apply more changes to them later.</p>
 
-        <nav class="page-nav"><a class="prev" href="/databases/sqlite.html">
+        <nav class="page-nav"><a class="prev" href="/databases/orm.html">
   Previous
 </a></nav>
         <nav class="page-nav"><a class="next" href="/exercises.html">
