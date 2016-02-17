@@ -367,22 +367,17 @@ If it exists we read it, and split the content into lines.</p>
 
 <p>Also, let&rsquo;s store the names on an instance variable in our route, so we can
 then use it in the template later:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/hello"</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
+  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
   <span class="vi">@names</span> <span class="o">=</span> <span class="n">read_names</span>
-  <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
-  <span class="n">erb</span> <span class="ss">:hello</span>
+  <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
+  <span class="n">erb</span> <span class="ss">:monstas</span>
 <span class="k">end</span>
 </code></pre>
 
-<p>Now we can output the names as an unordered list (<code>&lt;ul&gt;</code>) in our <code>hello.erb</code>.</p>
+<p>Now we can output the names as an unordered list (<code>&lt;ul&gt;</code>) in our <code>monstas.erb</code>.</p>
 
-<p>So let&rsquo;s replace this (we now want to display the full list):</p>
-<pre class="highlight erb"><code><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@message</span> <span class="cp">%&gt;</span>
-  <span class="nt">&lt;p&gt;</span><span class="cp">&lt;%=</span> <span class="vi">@message</span> <span class="cp">%&gt;</span><span class="nt">&lt;/p&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
-</code></pre>
-
-<p>With this:</p>
+<p>So let&rsquo;s add this at the end of your file (we now want to display the full list):</p>
 <pre class="highlight erb"><code><span class="nt">&lt;ul&gt;</span>
   <span class="cp">&lt;%</span> <span class="vi">@names</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="cp">%&gt;</span>
     <span class="nt">&lt;li&gt;</span><span class="cp">&lt;%=</span> <span class="nb">name</span> <span class="cp">%&gt;</span><span class="nt">&lt;/li&gt;</span>

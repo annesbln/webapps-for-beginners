@@ -355,36 +355,36 @@ and store it when we find it&rsquo;s valid. If it&rsquo;s not, then we want to d
 message to the user, and ask them to submit the form again.</p>
 
 <p>We could change our <code>post</code> route like so:</p>
-<pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/hello"</span> <span class="k">do</span>
-  <span class="nb">name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>
+<pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
+  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
 
-  <span class="k">if</span> <span class="nb">name</span><span class="p">.</span><span class="nf">to_s</span><span class="p">.</span><span class="nf">empty?</span>
+  <span class="k">if</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">to_s</span><span class="p">.</span><span class="nf">empty?</span>
     <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"You need to enter a name."</span>
-  <span class="k">elsif</span> <span class="n">read_names</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2"> is already included in our list."</span>
+  <span class="k">elsif</span> <span class="n">read_names</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="vi">@name</span><span class="p">)</span>
+    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2"> is already included in our list."</span>
   <span class="k">else</span>
-    <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span>
-    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Successfully stored the name </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">."</span>
+    <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
+    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Successfully stored the name </span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">."</span>
   <span class="k">end</span>
 
-  <span class="n">redirect</span> <span class="s2">"/hello?name=</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+  <span class="n">redirect</span> <span class="s2">"/monstas?name=</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">"</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>This is a valid implementation, and if you restart your application you
 can try it out.</p>
 
-<p>The <code>if</code> statement first checks if the <code>name</code> is empty. If it is we simply
+<p>The <code>if</code> statement first checks if the <code>@name</code> is empty. If it is we simply
 store a message to the session, and then redirect.</p>
 
-<p>Note that we call <code>to_s</code> (&ldquo;to string&rdquo;) on the <code>name</code>. This is useful because
-there might not be any value stored on <code>params[:name]</code>. In this case we&rsquo;d get
+<p>Note that we call <code>to_s</code> (&ldquo;to string&rdquo;) on the <code>@name</code>. This is useful because
+there might not be any value stored on <code>params[&quot;name&quot;]</code>. In this case we&rsquo;d get
 <code>nil</code>, which does not know the method <code>empty?</code>. We therefore turn a potential
 <code>nil</code> value into an empty string first.  Of course, if there&rsquo;s a string stored
 on <code>params[:key]</code>, then <code>to_s</code> would just return the same string.</p>
 
-<p>The <code>if</code> statement then checks if the given <code>name</code> already is included in the
-names in our file: the array returned by <code>read_names</code>. (We implemented this
+<p>The <code>if</code> statement then checks if the given <code>@name</code> already is included in the
+names in our file: the array returned by <code>read_names</code>. (We had implemented this
 method in order use it in our <code>get</code> route for displaying all the names, and now
 we can just re-use it here.) If we already have the name, then, again, we just
 add a message to the session, and redirect.</p>
@@ -424,18 +424,18 @@ route. Here&rsquo;s how we could do it:</p>
     <span class="k">end</span>
 <span class="k">end</span>
 
-<span class="n">post</span> <span class="s2">"/hello"</span> <span class="k">do</span>
-  <span class="nb">name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>
-  <span class="n">validator</span> <span class="o">=</span> <span class="no">NameValidator</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">read_names</span><span class="p">)</span>
+<span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
+  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+  <span class="n">validator</span> <span class="o">=</span> <span class="no">NameValidator</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="vi">@name</span><span class="p">,</span> <span class="n">read_names</span><span class="p">)</span>
 
   <span class="k">if</span> <span class="n">validator</span><span class="p">.</span><span class="nf">valid?</span>
-    <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span>
-    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Successfully stored the name </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">."</span>
+    <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
+    <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Successfully stored the name </span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">."</span>
   <span class="k">else</span>
     <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="n">validator</span><span class="p">.</span><span class="nf">message</span>
   <span class="k">end</span>
 
-  <span class="n">redirect</span> <span class="s2">"/hello?name=</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+  <span class="n">redirect</span> <span class="s2">"/monstas?name=</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">"</span>
 <span class="k">end</span>
 </code></pre>
 
@@ -455,18 +455,18 @@ and the user would have to re-enter it.</p>
 just re-render the same template right away, with the same data.</p>
 
 <p>Here&rsquo;s how we could do that:</p>
-<pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/hello"</span> <span class="k">do</span>
-  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>
+<pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
+  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
   <span class="vi">@names</span> <span class="o">=</span> <span class="n">read_names</span>
   <span class="n">validator</span> <span class="o">=</span> <span class="no">NameValidator</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="vi">@name</span><span class="p">,</span> <span class="vi">@names</span><span class="p">)</span>
 
   <span class="k">if</span> <span class="n">validator</span><span class="p">.</span><span class="nf">valid?</span>
     <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
     <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Successfully stored the name </span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">."</span>
-    <span class="n">redirect</span> <span class="s2">"/hello?name=</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">redirect</span> <span class="s2">"/monstas?name=</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">"</span>
   <span class="k">else</span>
     <span class="vi">@message</span> <span class="o">=</span> <span class="n">validator</span><span class="p">.</span><span class="nf">message</span>
-    <span class="n">erb</span> <span class="ss">:hello</span>
+    <span class="n">erb</span> <span class="ss">:monstas</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
@@ -479,7 +479,7 @@ the <code>@message</code> instance variable and render our template again.</p>
 
 <p>However, this now displays an empty &ldquo;Hello&rdquo; at the top. Why&rsquo;s that?</p>
 
-<p>We assign <code>params[:name]</code> to the instance variable <code>@name</code> which we then check
+<p>We assign <code>params[&quot;name&quot;]</code> to the instance variable <code>@name</code> which we then check
 in our template: <code>&lt;% if @name %&gt;</code>. However, since this has been submitted by a
 form, with an input element called <code>name</code>, what we get is an empty string, not
 <code>nil</code>.</p>
