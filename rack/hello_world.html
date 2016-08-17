@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Bonus: Your first Rack app | Webapps for Beginners</title>
+    <title>Your first Rack app | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
@@ -98,22 +98,22 @@
   </li>
   <li class="directory expanded">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li class="active">
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -336,14 +363,18 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Bonus: Your first Rack app</h1>
+        <h1>Your first Rack app</h1>
 
 <p>Let&rsquo;s jump right in.</p>
 
 <p>In a new directory <code>rack</code> create a file <code>config.ru</code> with the following content:</p>
 <pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Application</span>
   <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span> <span class="s2">"Content-Type"</span> <span class="o">=&gt;</span> <span class="s2">"text/html"</span> <span class="p">},</span> <span class="p">[</span><span class="s2">"Yay, your first web application! &lt;3"</span><span class="p">]]</span>
+    <span class="n">status</span>  <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">"Content-Type"</span> <span class="o">=&gt;</span> <span class="s2">"text/html"</span> <span class="p">}</span>
+    <span class="n">body</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">"Yay, your first web application! &lt;3"</span><span class="p">]</span>
+
+    <span class="p">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="p">]</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
@@ -367,7 +398,7 @@ should see something like:</p>
 </code></pre>
 
 <p>Of course the version numbers may be different, but the important bit that
-you want to look for is the port.</p>
+you want to look for is the port. In our case that&rsquo;s <code>9292</code>.</p>
 
 <p>Now your web application has started you can point your browser to
 <a href="http://localhost:9292"><a href="http://localhost:9292">http://localhost:9292</a></a>. You should see
@@ -375,10 +406,21 @@ something like this:</p>
 
 <p><img src="/assets/images/rack_1-9460dec3.png"></p>
 
-<p>Pretty cool, isn&rsquo;t it? With just a few lines of plain Ruby code you have
-just written an actual web application.</p>
+<p>Pretty cool, isn&rsquo;t it? With just a few lines of simple Ruby code you have just
+written an actual web application, and started a fully functional web server
+with it.</p>
 
-<p>Now, let&rsquo;s have a closer look at the code.</p>
+<p>Now, let&rsquo;s have a closer look at the code. Here&rsquo;s our class again:</p>
+<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Application</span>
+  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">status</span>  <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">"Content-Type"</span> <span class="o">=&gt;</span> <span class="s2">"text/html"</span> <span class="p">}</span>
+    <span class="n">body</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">"Yay, your first web application! &lt;3"</span><span class="p">]</span>
+
+    <span class="p">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="p">]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
 
 <p>We define a class <code>Application</code>, and, on the last line, create an instance
 of it, which we pass to the method <code>run</code>. The method <code>run</code> is defined by
@@ -400,18 +442,24 @@ just returns the same static array whenever it is called.</p>
 <p>So the method <code>call</code> returns something that represents an HTTP response in Rack!</p>
 
 <p>Rack makes it so that whenever there&rsquo;s a request coming in (on the computer
-that is <code>localhost</code>, i.e. your own, local computer, and on the port 9292),
-it will turn this request into a hash <code>env</code> that is passed to the method <code>call</code>.
-I.e. the argument <code>env</code> contains the request information. We&rsquo;ll have a look
-at that in a minute.</p>
+that is <code>localhost</code>, i.e. your own, local computer, and on the port <code>9292</code>),
+it will turn this request into a hash <code>env</code>. It will then hand us this hash by
+calling our method <code>call</code>.  I.e. the hash <code>env</code> that is passed to us as an
+argument contains the request information. We&rsquo;ll have a look at that in a
+minute.</p>
 
-<p>Rack then expects that you return an array containing those three elements:</p>
+<p>Rack then expects us (our method <code>call</code>) to return an array containing those
+three elements:</p>
 
 <ul>
 <li>The HTTP response code</li>
 <li>A hash of headers</li>
 <li>The response body, which must respond to each (i.e. we can just use an array)</li>
 </ul>
+
+<p>In other words, that&rsquo;s also a kind of protocol (programmers also use the term
+&ldquo;interface&rdquo; here). Rack defines how we can interact with it in a formal way in
+terms of Ruby. The protocol is defined as something like:</p>
 
 <p class="hint">
 A Rack application implements a method <code>call</code> that takes a hash
@@ -420,13 +468,38 @@ status code, a hash containing the headers, and an array containing the request
 body.
 </p>
 
-<p>Once it got these three things back from our method <code>call</code> it will create
+<p>Once Rack got these three things back from our method <code>call</code> it will create
 the respective response (text) message out of it, and send it back to the
-browser.</p>
+browser, so the browser can handle it (and in our case display the body).</p>
 
 <p>Great!</p>
 
-<p>Footnotes:</p>
+<p>If you&rsquo;ve paid attention close enough you may have noticed that our little
+Rack application actually is lying to the browser. Can you spot where?</p>
+
+<p>Our response header hash defines a <code>Content-Type</code> header. And in that header we
+claim that our response body has the content type <code>text/html</code>. But then we
+return a body that isn&rsquo;t HTML, but just plain text. So that&rsquo;s wrong. Luckily
+browsers are pretty forgiving. They try to do their best to still display
+useful information to the user, and fix things for us.</p>
+
+<p>We could fix our application by specifying that the <code>Content-Type</code> is plain
+text by setting the value to <code>text/plain</code>. But instead we can also simply
+turn the body into HTML like so:</p>
+<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Application</span>
+  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">status</span>  <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">"Content-Type"</span> <span class="o">=&gt;</span> <span class="s2">"text/html"</span> <span class="p">}</span>
+    <span class="n">body</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">"&lt;html&gt;&lt;body&gt;&lt;h1&gt;Yay, your first web application! &lt;3&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;"</span><span class="p">]</span>
+
+    <span class="p">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="p">]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">run</span> <span class="no">Application</span><span class="p">.</span><span class="nf">new</span>
+</code></pre>
+
+<h2>Footnotes:</h2>
 
 <p><a name="footnote-1">[1]</a> Most examples for Rack applications will use
 a <code>Proc</code> or <code>lambda</code>, which can be called using their method <code>call</code>. Here&rsquo;s an
@@ -455,8 +528,10 @@ or <code>lambda</code>. Pretty slick.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Routes | Webapps for Beginners</title>
+    <title>Incremental Changes | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+    <nav class="page-nav"><a class="prev" href="/migrations/database_structure.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+    <nav class="page-nav"><a class="next" href="/migrations/rollbacks.html">
   Next
 </a></nav>
 
@@ -118,7 +118,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory expanded">
+  <li class="directory">
     <a href="/sinatra.html">
       Sinatra
     </a>
@@ -138,7 +138,7 @@
           Your first Sinatra app
         </a>
       </li>
-      <li class="active">
+      <li>
         <a href="/sinatra/routes.html">
           Routes
         </a>
@@ -295,7 +295,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory">
+  <li class="directory expanded">
     <a href="/migrations.html">
       Migrations
     </a>
@@ -305,7 +305,7 @@
           Database Structure
         </a>
       </li>
-      <li>
+      <li class="active">
         <a href="/migrations/incremental_changes.html">
           Incremental Changes
         </a>
@@ -363,47 +363,45 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Routes</h1>
+        <h2>Incremental changes</h2>
 
-<p>In Sinatra calls to methods like <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code> are called
-<em>routes</em>. They take a path, and a block that handles a request.</p>
+<p>Instead of sharing the final database structure, as defined in our <code>schema.sql</code>
+file, we would share many files where each of them defines a single change to
+our database structure. We also somehow number these files so we can run each
+change one after another in the precise same order.</p>
 
-<p>What&rsquo;s up with that term?</p>
-
-<p>The request is being picked up by the webserver, and then <em>routed</em> to a piece
-of code that handles the request, and specifies the response. They&rsquo;re like the
-info desk at a shopping mall: You (as an HTTP request) walk up to them, and
-tell them <code>GET /something</code>. They&rsquo;ll route (send) you to a certain shop on a
-certain floor where you can find what you&rsquo;re after.</p>
-
-<p>So, this would be three Sinatra routes:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/"</span> <span class="k">do</span>
-  <span class="s2">"OMG, hello Ruby Monstas!"</span>
-<span class="k">end</span>
-
-<span class="n">get</span> <span class="s2">"/signup"</span> <span class="k">do</span>
-  <span class="s2">"Here you can sign up for the next beginners course."</span>
-<span class="k">end</span>
-
-<span class="n">post</span> <span class="s2">"/signin"</span> <span class="k">do</span>
-  <span class="c1"># do something to sign in the user</span>
-<span class="k">end</span>
+<p>Imagine our first step is to define the table members. So &ldquo;change 1&rdquo; would
+contain our SQL code from above. We&rsquo;d store this in a file <code>db-change-1.sql</code>:</p>
+<pre class="highlight plaintext"><code>CREATE TABLE members (id INTEGER PRIMARY KEY, name VARCHAR(255), joined_on DATE);
 </code></pre>
 
-<p>When a request comes in Sinatra will look at the request method and path, and
-match it against the first route:</p>
+<p>Now, the next person adds another change to the database structure, which adds
+the table <code>messages</code> from our example above. They store this in a file
+<code>db-change-2.sql</code>:</p>
+<pre class="highlight plaintext"><code>CREATE TABLE messages (id INTEGER PRIMARY KEY, member_id INTEGER, message TEXT);
+</code></pre>
 
-<ul>
-<li>If it matches it will run (call) the block and return a response to the
-browser.</li>
-<li>If it does not match, it will look at the next route, and so on.</li>
-<li>If no route matches then Sinatra responds with a <code>404 Not Found</code>.</li>
-</ul>
+<p>And then, a couple days later, another person figures we should also keep track
+of a timestamp which tells us when a message has been sent. We store this change
+in a file <code>db-change-3.sql</code></p>
+<pre class="highlight plaintext"><code>ALTER TABLE messages ADD COLUMN sent_at DATETIME;
+</code></pre>
 
-        <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+<p>Now we have 3 changes, stored in 3 separate files. We also know the order in
+which these changes have been created: we can defer this from their filenames.
+If we keep track of changes that we already have applied to our database
+structure, then we can easily run the ones our collaborators have added just
+recently, and continue working on our code.</p>
+
+<p>This concept is called <em>database migrations</em>: We migrate the database structure
+from one state to the next one, by applying one change after another.</p>
+
+<p>Sounds useful?</p>
+
+        <nav class="page-nav"><a class="prev" href="/migrations/database_structure.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+        <nav class="page-nav"><a class="next" href="/migrations/rollbacks.html">
   Next
 </a></nav>
       </article>

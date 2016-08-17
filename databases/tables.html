@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory expanded">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -338,14 +365,15 @@
         <nav class="menu"><a href="#"></a></nav>
         <h1>Tables</h1>
 
-<p>At its core, you can imagine a database as a bunch of spreadsheets, except
-they&rsquo;re called &ldquo;tables&rdquo;.</p>
+<p>At its core, you can imagine a database as a bunch of spreadsheets. Except
+they&rsquo;re called &ldquo;tables&rdquo;, and they can be huge, containing tons and tons of
+rows. More than any spreadsheet ever could handle.</p>
 
 <p>Each table has a bunch of columns, and can have an arbitrary number of rows
-(also referred to as &ldquo;records&rdquo;).  Columns have a name and a type. Their type
-specifies which kind of data can be stored. Each row has a number of cells
-(referred to as &ldquo;fields&rdquo;), and each one of the cells can hold some value
-with the type defined by the column.</p>
+(also referred to as &ldquo;records&rdquo;). Columns (also referred to as &ldquo;fields&rdquo;) have a
+name and a type. Their type specifies which kind of data can be stored. Each
+row has a number of cells , and each one of the cells can hold some value with
+the type defined by the column.</p>
 
 <p>Let&rsquo;s have a look at an example.</p>
 
@@ -427,10 +455,10 @@ message.</p>
 in this example, Anja has posted two status updates, Rebecca one, and Carla
 hasn&rsquo;t posted yet.</p>
 
-<p>If you think at the two columns <code>id</code> and <code>member_id</code> you notice that the column
+<p>If you look at the two columns <code>id</code> and <code>member_id</code> you notice that the column
 <code>id</code> is special: It must never contain duplicate values, because we want to use
 the <code>id</code> to identify a certain message (or member). This is called a <em>primary
-key</em>, and the column is called a unique one. Also, it usually auto-increments
+key</em>, and the column is called a &ldquo;unique&rdquo; one. Also, it usually auto-increments
 the id for us: Whenever we store a new row to this table then the database will
 assign an id, make sure we get the next number, and never get duplicate values.</p>
 
@@ -461,8 +489,10 @@ table, or retrieve it?</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

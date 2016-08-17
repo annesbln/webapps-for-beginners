@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -350,13 +377,10 @@ have to change all of our templates.</p>
 that&rsquo;s something Sinatra supports, too. They&rsquo;re called &ldquo;layout&rdquo; templates.</p>
 
 <p>Here&rsquo;s how it works:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s1">'/hello/:name'</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s1">'/monstas/:name'</span> <span class="k">do</span>
   <span class="n">template</span> <span class="o">=</span> <span class="s2">"&lt;h1&gt;Hello &lt;%= name %&gt;&lt;/h1&gt;"</span>
-  <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span> <span class="p">},</span>
-    <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="s2">"&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;"</span>
-  <span class="p">}</span>
-  <span class="n">erb</span> <span class="n">template</span><span class="p">,</span> <span class="n">options</span>
+  <span class="n">layout</span>   <span class="o">=</span> <span class="s2">"&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;"</span>
+  <span class="n">erb</span> <span class="n">template</span><span class="p">,</span> <span class="p">{</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="n">layout</span> <span class="p">}</span>
 <span class="k">end</span>
 </code></pre>
 
@@ -367,19 +391,23 @@ the <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code> tags from our layout
 
 <p>The only real change that we have made is that we&rsquo;ve added the <code>:layout</code> option
 to the options hash. Because this is too much stuff to fit on one line we have
-also sticked the template and options into local variables.</p>
+also sticked the template and layout into local variables.</p>
 
 <p>As you can see the rendered &ldquo;content&rdquo; (from our main template) is being wrapped
-by, or inserted to, our layout template.</p>
+by, or inserted into, our layout template.</p>
 
 <p>What about that <code>yield</code> thing in our layout template though?</p>
 
-<p><code>yield</code> is a keyword in Ruby that calls a block that was given to a method.</p>
+<p><code>yield</code> is a keyword in Ruby that calls a block that was given to a method.
+Whenever you pass a block to a method (such as <code>each</code>, <code>collect</code>, <code>select</code>, and
+so on) this method can then call the block by using the keyword <code>yield</code>.
+Because we&rsquo;ve never implemented a method that took a block we&rsquo;ve also never
+discussed this keyword.</p>
 
-<p>Hmmmmm. Well, that&rsquo;s how it works under the hood, that is correct. However, in
-this context, all you need to remember is that, in a layout template, <code>&lt;%=
-yield %&gt;</code> marks the place where the other template (the one that is being
-wrapped) is supposed to be inserted.</p>
+<p>Hmmmmm. Ok, that&rsquo;s how it works under the hood, yes. However, in this context,
+all you need to remember is that, in a layout template, <code>&lt;%= yield %&gt;</code> marks
+the place where the other template (the one that is being wrapped) is supposed
+to be inserted.</p>
 
 <p>Does this make sense?</p>
 
@@ -388,7 +416,8 @@ renders a different template. Say, there&rsquo;s one for the homepage, one for
 a user signup page, one for a user profile page, and so on. Each of these
 templates is supposed to be wrapped into the same layout, which has the
 enclosing <code>&lt;html&gt;</code>, <code>&lt;body&gt;</code>, and other tags, which are all common to each
-of these pages.</p>
+of these pages. Maybe there&rsquo;s also a common header menu at the top, and a
+common footer at the end of the page.</p>
 
 <p>Each route will then render its own template, and specify the layout template
 to be used, which will replace the <code>&lt;%= yield %&gt;</code> tag with the template, and
@@ -407,8 +436,10 @@ wrap it.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

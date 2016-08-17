@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Routes | Webapps for Beginners</title>
+    <title>Migrations | Webapps for Beginners</title>
 
-    <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
+    <link href="assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+    <nav class="page-nav"><a class="prev" href="/databases/orm.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+    <nav class="page-nav"><a class="next" href="/migrations/database_structure.html">
   Next
 </a></nav>
 
@@ -118,7 +118,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory expanded">
+  <li class="directory">
     <a href="/sinatra.html">
       Sinatra
     </a>
@@ -138,7 +138,7 @@
           Your first Sinatra app
         </a>
       </li>
-      <li class="active">
+      <li>
         <a href="/sinatra/routes.html">
           Routes
         </a>
@@ -295,7 +295,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory">
+  <li class="active directory expanded">
     <a href="/migrations.html">
       Migrations
     </a>
@@ -363,47 +363,59 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Routes</h1>
+        <h1>Migrations</h1>
 
-<p>In Sinatra calls to methods like <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code> are called
-<em>routes</em>. They take a path, and a block that handles a request.</p>
+<p><em>Persist executable changes to the database structure</em></p>
 
-<p>What&rsquo;s up with that term?</p>
+<p>In programming, when we store something to a medium that survives when the
+program terminates (or when the computer is shut down, and rebooted), we use
+the term <a href="http://en.wikipedia.org/wiki/Persistence_(computer_science)">persistence</a>
+for that.</p>
 
-<p>The request is being picked up by the webserver, and then <em>routed</em> to a piece
-of code that handles the request, and specifies the response. They&rsquo;re like the
-info desk at a shopping mall: You (as an HTTP request) walk up to them, and
-tell them <code>GET /something</code>. They&rsquo;ll route (send) you to a certain shop on a
-certain floor where you can find what you&rsquo;re after.</p>
+<p>Databases are probably the most common way to persist data in webapplications.
+Your web application would read data from the database, and store data to it.
+E.g. our application could read members, and store them. We use the term
+<em>runtime</em> for this: Our application does all of this &ldquo;at runtime&rdquo;, meaning:
+after it has been started, and while it is running.</p>
 
-<p>So, this would be three Sinatra routes:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/"</span> <span class="k">do</span>
-  <span class="s2">"OMG, hello Ruby Monstas!"</span>
-<span class="k">end</span>
+<p>This data is stored as rows in our database tables. What about the structure
+though?</p>
 
-<span class="n">get</span> <span class="s2">"/signup"</span> <span class="k">do</span>
-  <span class="s2">"Here you can sign up for the next beginners course."</span>
-<span class="k">end</span>
+<p>The database structure normally does not change at runtime. The users of
+your application do not get to add more columns to the <code>members</code> table,
+right? That&rsquo;s something you, as a developer, want to define, basically
+while you write your code.</p>
 
-<span class="n">post</span> <span class="s2">"/signin"</span> <span class="k">do</span>
-  <span class="c1"># do something to sign in the user</span>
-<span class="k">end</span>
+<p>So even though the database structure itself is not exactly part of your code,
+it highly relates to your code: Your Ruby code makes assumptions about what
+tables exist, and what columns each of the tables has. In other words, your
+code would not work unless the database has a certain structure.</p>
+
+<p>E.g. this Ruby code from our previous example makes the assumption that there
+is a table <code>members</code> and it has at least the columns <code>id</code>, <code>name</code>, and
+<code>joined_on</code>:</p>
+<pre class="highlight ruby"><code><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
 </code></pre>
 
-<p>When a request comes in Sinatra will look at the request method and path, and
-match it against the first route:</p>
+<p>Because defining the database structure is a task that is separate from running
+the actual application (starting your web server), there usually is some tool
+to create a database, and apply the exact structure that your application (Ruby
+code) requires.</p>
 
-<ul>
-<li>If it matches it will run (call) the block and return a response to the
-browser.</li>
-<li>If it does not match, it will look at the next route, and so on.</li>
-<li>If no route matches then Sinatra responds with a <code>404 Not Found</code>.</li>
-</ul>
+<p>One could, of course, create the database, and its structure manually, just
+like you&rsquo;ve just defined a table in the interactive SQLite shell.  However that
+obviously is tedious, makes it difficult to collaborate with others, and
+install your application in different environments: People would have to create
+the database manually over and over, so that&rsquo;s not really a practical option.</p>
 
-        <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+<p>Instead web applications use a concept called &ldquo;database migrations&rdquo;, and we&rsquo;ll
+explore it here because it&rsquo;s going to be a big topid in Rails, too.</p>
+
+        <nav class="page-nav"><a class="prev" href="/databases/orm.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+        <nav class="page-nav"><a class="next" href="/migrations/database_structure.html">
   Next
 </a></nav>
       </article>
@@ -423,7 +435,7 @@ browser.</li>
       </ul>
     </footer>
 
-    <script src="../assets/javascripts/modernizr-4c875d94.js" type="text/javascript"></script>
-    <script src="../assets/javascripts/monstas-e84d6217.js" type="text/javascript"></script>
+    <script src="assets/javascripts/modernizr-4c875d94.js" type="text/javascript"></script>
+    <script src="assets/javascripts/monstas-e84d6217.js" type="text/javascript"></script>
   </body>
 </html>

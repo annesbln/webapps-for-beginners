@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Migrations | Webapps for Beginners</title>
+    <title>Tools | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/databases/orm.html">
+    <nav class="page-nav"><a class="prev" href="/migrations/rollbacks.html">
   Previous
 </a></nav>
     <nav class="page-nav"><a class="next" href="/exercises.html">
@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,9 +261,14 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
-  <li class="directory expanded">
+  <li class="directory">
     <a href="/databases.html">
       Databases
     </a>
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory expanded">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
+      <li>
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
       <li class="active">
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -336,164 +363,23 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Migrations</h1>
+        <h2>Migration tools</h2>
 
-<p>In programming, when we store something to a medium that survives when the
-program terminates (or when the computer is shut down, and rebooted), we use
-the term <a href="http://en.wikipedia.org/wiki/Persistence_(computer_science)">persistence</a>
-for that.</p>
+<p>Of course, managing all of this manually is a little tedius so far:</p>
 
-<p>Databases are probably the most common way to persist data in webapplications.
-Your web application would read data from the database, and store data to it.
-E.g. our application could read members, and store them. We use the term
-<em>runtime</em> for this: Our application does all of this &ldquo;at runtime&rdquo;, meaning:
-after it has been started, and while it is running.</p>
-
-<p>This data is stored as rows in our database tables. What about the structure
-though?</p>
-
-<p>The database structure normally does not change at runtime. The users of
-your application do not get to add more columns to the <code>members</code> table,
-right? That&rsquo;s something you, as a developer, want to define, basically
-while you write your code.</p>
-
-<p>So even though the database structure itself is not exactly part of your code,
-it highly relates to your code: Your Ruby code makes assumptions about what
-tables exist, and what columns each of the tables has. In other words, your
-code would not work unless the database has a certain structure.</p>
-
-<p>E.g. this Ruby code from our previous example makes the assumption that there
-is a table <code>members</code> and it has at least the columns <code>id</code>, <code>name</code>, and
-<code>joined_on</code>:</p>
-<pre class="highlight ruby"><code><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
-</code></pre>
-
-<p>Because defining the database structure is a task that is separate from running
-the actual application (starting your web server), there usually is some tool
-to create a database, and apply the exact structure that your application (Ruby
-code) requires.</p>
-
-<p>One could, of course, create the database, and its structure manually, just
-like you&rsquo;ve just defined a table in the interactive SQLite shell.  However that
-obviously is tedious, makes it difficult to collaborate with others, and
-install your application in different environments: People would have to create
-the database manually over and over, so that&rsquo;s not really a practical option.</p>
-
-<p>One way to share, and programmatically load a database schema is to store the
-respective SQL commands to a file, and make the database load it.</p>
-
-<p>For example, for our <code>members</code> database we could have a file <code>schema.sql</code> that
-contains the following SQL command (we only have one table, so a single command
-is sufficient):</p>
-<pre class="highlight plaintext"><code>CREATE TABLE members (id INTEGER PRIMARY KEY, name VARCHAR(255), joined_on DATE);
-</code></pre>
-
-<p>We could then import this structure definition into a new database named
-<code>members-2</code> using a command like this:</p>
-<pre class="highlight plaintext"><code>cat schema.sql | sqlite3 members-2
-</code></pre>
-
-<p>We could share this file with other developers, and they could create the same
-database with the same command, making sure they&rsquo;d always end up with the same
-database that we have, and that our application (Ruby code) requires.</p>
-
-<p>However, there&rsquo;s another problem with this.</p>
-
-<p>Imagine we&rsquo;re all working on this shared Ruby Monstas members app. Someone
-starts by defining a first, simple version of the <code>members</code>, much like the
-one that we currently have. Then later, someone else picks up work, and adds
-another column. Maybe someone else will then also rename one of the columns,
-or drop it, because it&rsquo;s no longer required.</p>
-
-<p>Everytime we&rsquo;d export a new version of our database schema to the file <code>schema.sql</code>
-and share it with each other. However, since the database schema only describes
-the database structure in its final state, we could not just run it: Our local
-database already has a certain table structure defined, and (e.g.) the <code>CREATE
-TABLE</code> command would fail. The only solution to this would be to delete our
-local database, and re-create it using the new schema. This would work fine
-in development. However, what if we already have this application running
-publicly, and people are already using it? We&rsquo;d then loose all the data that
-has been stored previously. Obviously that wouldn&rsquo;t be an acceptable solution.</p>
-
-<p>The solution to this is a concept that is referred to as <em>database migrations</em>.</p>
-
-<h2>Incremental changes</h2>
-
-<p>Instead of sharing the final database structure, as defined in our <code>schema.sql</code>
-file, we would share many files where each of them defines a single change to
-our database structure. We also somehow number these files so we can run each
-change one after another in the precise same order.</p>
-
-<p>Imagine our first step is to define the table members. So &ldquo;change 1&rdquo; would
-contain our SQL code from above. We&rsquo;d store this in a file <code>db-change-1.sql</code>:</p>
-<pre class="highlight plaintext"><code>CREATE TABLE members (id INTEGER PRIMARY KEY, name VARCHAR(255), joined_on DATE);
-</code></pre>
-
-<p>Now, the next person adds another change to the database structure, which adds
-the table <code>messages</code> from our example above. They store this in a file
-<code>db-change-2.sql</code>:</p>
-<pre class="highlight plaintext"><code>CREATE TABLE messages (id INTEGER PRIMARY KEY, member_id INTEGER, message TEXT);
-</code></pre>
-
-<p>And then, a couple days later, another person figures we should also keep track
-of a timestamp which tells us when a message has been sent. We store this change
-in a file <code>db-change-3.sql</code></p>
-<pre class="highlight plaintext"><code>ALTER TABLE messages ADD COLUMN sent_at DATETIME;
-</code></pre>
-
-<p>Now we have 3 changes, stored in 3 separate files. We also know the order in
-which these changes have been created: we can defer this from their filenames.
-If we keep track of changes that we already have applied to our database
-structure, then we can easily run the ones our collaborators have added just
-recently, and continue working on our code.</p>
-
-<p>This concept is called <em>database migrations</em>: We migrate the database structure
-from one state to the next one, by applying one change after another.</p>
-
-<p>Sounds useful?</p>
-
-<p>There&rsquo;s more to this. What if we make a change to our database structure, apply
-it to our &ldquo;production&rdquo; application (i.e. the one that is publicly running on
-the internet, and actively used by our users), and then notice we&rsquo;ve made a
-mistake? We&rsquo;d then need a way to quickly roll back our change. How would we do
-that?</p>
-
-<h2>Incremental rollbacks</h2>
-
-<p>This is why we would, per change (or per &ldquo;migration&rdquo;), not only define a way
-to <em>apply</em> a certain change. We would also define a way to roll it back, i.e.
-undo it.</p>
-
-<p>With our naive, homegrown example migrations system, where we store plain
-SQL in files, we could do this by using file names like <code>db-change-1-up.sql</code>
-and <code>db-change-2-down.sql</code>.</p>
-
-<p>In the terminology of migrations the terms <code>up</code> and <code>down</code> are used to describe
-changes that are <em>applied</em> and <em>undone</em>: Migrating <em>up</em> means applying a
-change, and migrating <em>down</em> means undoing a change (rolling it back).</p>
-
-<p>This is because traditionally migrations (changes) have been numbered sequentially,
-just as we do this in our example. That means applying a new change migrates
-the database &ldquo;up&rdquo; to a higher verion (change) number. E.g. if we&rsquo;d apply our
-change <code>db-change-up-3.sql</code> we&rsquo;d &ldquo;migrate up to version 3&rdquo;. If we then undo it
-we &ldquo;migrate down from version 3&rdquo;.</p>
-
-<p>Does this make sense?</p>
-
-<h2>Migration tools</h2>
-
-<p>Of course, all of this is a little tedius so far, since we need to deal with
-plain SQL. On top of this we do not even have a good way to keep track of
-the change (version) number that has been applied to the database structure
-last.</p>
+<ul>
+<li>We need to deal with plain SQL.</li>
+<li>We need to execute individual SQL (migration) files with a manual command on the command line.</li>
+<li>We do not have a good way of keeping track of the change (version) number that has been applied to the database structure last.</li>
+</ul>
 
 <p>For that reason ORM tools usually come with a way to not only automatically
 track changes that still need to be applied to the database structure (and
-skip the ones that already were applied in the past). They also allow us
-to define the database structure in a Ruby <a href="../sinatra/dsl.html">DSL</a>, so
-we do not have to deal with the gory details of SQL, but can use some nice,
-readable Ruby code instead.</p>
+skip the ones that already were applied in the past).</p>
+
+<p>They also allow us to define the database structure in a Ruby
+<a href="../sinatra/dsl.html">DSL</a>, so we do not have to deal with the gory details of
+SQL, but can use some nice, readable Ruby code instead.</p>
 
 <p>Here&rsquo;s an example of a migration written for Sequel:</p>
 <pre class="highlight ruby"><code><span class="no">Sequel</span><span class="p">.</span><span class="nf">migration</span> <span class="k">do</span>
@@ -501,7 +387,7 @@ readable Ruby code instead.</p>
     <span class="n">create_table</span><span class="p">(</span><span class="ss">:members</span><span class="p">)</span> <span class="k">do</span>
       <span class="n">primary_key</span> <span class="ss">:id</span>
       <span class="n">string</span> <span class="ss">:name</span>
-      <span class="n">datetime</span> <span class="ss">:joined_at</span>
+      <span class="n">datetime</span> <span class="ss">:joined_on</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
@@ -516,7 +402,7 @@ readable Ruby code instead.</p>
   <span class="k">def</span> <span class="nf">up</span>
     <span class="n">create_table</span><span class="p">(</span><span class="ss">:members</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">table</span><span class="o">|</span>
       <span class="n">table</span><span class="p">.</span><span class="nf">string</span> <span class="ss">:name</span>
-      <span class="n">table</span><span class="p">.</span><span class="nf">datetime</span> <span class="ss">:joined_at</span>
+      <span class="n">table</span><span class="p">.</span><span class="nf">datetime</span> <span class="ss">:joined_on</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
@@ -542,7 +428,7 @@ and let us describe changes in the same Ruby code no matter what.</p>
 making sense as soon as you use migrations in praxis, in order to create
 tables, and then apply more changes to them later.</p>
 
-        <nav class="page-nav"><a class="prev" href="/databases/orm.html">
+        <nav class="page-nav"><a class="prev" href="/migrations/rollbacks.html">
   Previous
 </a></nav>
         <nav class="page-nav"><a class="next" href="/exercises.html">
@@ -553,8 +439,10 @@ tables, and then apply more changes to them later.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

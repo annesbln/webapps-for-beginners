@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -351,18 +378,23 @@ the initial application.&rdquo;</em></p>
 
 <p>Obviously, whenever we reload the URL our application adds the name again, and
 again, and again. Since we do this in response to a <code>GET</code> request we do not
-comply with the HTTP specification.</p>
+comply with the HTTP specification: we do change the result, the HTML that
+is returned.</p>
 
 <p>When we store, modify, or delete data in our application we also say that we
 &ldquo;change the state&rdquo; of the application: It goes from &ldquo;3 names stored&rdquo; to &ldquo;4
 names stored&rdquo;.</p>
 
-<p><code>GET</code> requests should not modify the state of our application though. They
-should only &ldquo;get&rdquo; what&rsquo;s already there. So what do we do?</p>
+<p><code>GET</code> requests should not modify the state of our application according to the
+HTTP specification. They should only &ldquo;get&rdquo; what&rsquo;s already there, and not change
+it. So what do we do?</p>
 
-<p>The appropriate HTTP verb (request method) to use for this kind of request
-is <code>POST</code>. The result of a <code>POST</code> request does not need to be idempotent,
-and it&rsquo;s basically up to the application to decide what to do with it.</p>
+<p>The appropriate HTTP verb (request method) to use for this kind of request is
+<code>POST</code>. The result of a <code>POST</code> request does not need to be idempotent, and it&rsquo;s
+basically up to the application to decide what to do with it.  In modern
+applications <code>POST</code> usually means &ldquo;add this thing to the collection&rdquo;, where
+&ldquo;the collection&rdquo; is defined by the path: In our case we want to add a name to
+the collection <code>monstas</code>.</p>
 
 <p>In order to tell the browser to send a <code>POST</code> request instead of a <code>GET</code>
 request we add this as an attribute to the <code>&lt;form&gt;</code> tag like so:</p>
@@ -377,9 +409,9 @@ Sinatra&rsquo;s 404 (Not Found) page though: &ldquo;Sinatra doesn’t know this 
 
 <p>Of course!</p>
 
-<p>We do not have a route for <code>POST</code> requests, yet. Remember how the HTTP
-verb is a key part of the HTTP request? And that Sinatra wants us to
-use these verbs in order to define our route?</p>
+<p>We do not have a route for <code>POST</code> requests, yet. Remember how the HTTP verb is
+a key part of the HTTP request? And Sinatra wants us to use these verbs in
+order to define our route.</p>
 
 <p>So let&rsquo;s add one, and move the logic for storing the name to the new
 route:</p>
@@ -410,7 +442,7 @@ have a <code>post</code> route for the same path, and we store the name if there
 <span class="k">end</span>
 </code></pre>
 
-<p><img src="/assets/images/storing_data_2-262afb82.png"></p>
+<p><img src="/assets/images/storing_data_2-81c00718.png"></p>
 
 <p>Hmmmm. Ok, this isn&rsquo;t too bad, we could make this a proper HTML template.</p>
 
@@ -428,8 +460,10 @@ list of all the names next?</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

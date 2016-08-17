@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -348,10 +375,12 @@ response.&rdquo;</em></p>
 
 <p>Imagine talking to a person with a very shortlived memory:</p>
 
-<p>&ldquo;Hey, who are you?&rdquo; - <em>&ldquo;I&rsquo;m a web application.&rdquo;</em>
-&ldquo;Hey, who are you?&rdquo; - <em>&ldquo;I&rsquo;m a web application.&rdquo;</em>
-&ldquo;Hey, who are you?&rdquo; - <em>&ldquo;I&rsquo;m a web application.&rdquo;</em>
-&ldquo;How often have I just asked you who you are?&rdquo; - <em>&ldquo;I don&rsquo;t know, I don&rsquo;t keep track.&rdquo;</em></p>
+<ul>
+<li>Hey, who are you? - <em>I&rsquo;m a web application.</em></li>
+<li>Hey, who are you? - <em>I&rsquo;m a web application.</em></li>
+<li>Hey, who are you? - <em>I&rsquo;m a web application.</em></li>
+<li>How often have I just asked you who you are? - <em>I don&rsquo;t know, I don&rsquo;t keep track.</em></li>
+</ul>
 
 <p>That&rsquo;s what&rsquo;s meant by HTTP being stateless: The web application just responds
 to the request at hand, but has no way to identify how these requests relate to
@@ -368,7 +397,15 @@ people (browsers) it is talking to: There is no concept of a conversation, or
 <p>However, of course there are ways to identify your users. We all know that we
 can sign in to a web application, and it would recognize who we are. Right?</p>
 
-<p>Often web applications use cookies for this.</p>
+<p>When you sign into Gmail it will display <em>your</em> emails, not anyone else&rsquo;s
+emails.  Obviously it needs to know who you are, so it can find <em>your</em> emails.
+The same happens for basically every useful, modern web application.</p>
+
+<p>In order to identfy who is making a request web applications often use cookies
+for this. There are other techniques, but using cookies is by far the most
+common one.</p>
+
+<p>So let&rsquo;s check that out.</p>
 
         <nav class="page-nav"><a class="prev" href="/storing_data/redirect.html">
   Previous
@@ -381,8 +418,10 @@ can sign in to a web application, and it would recognize who we are. Right?</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

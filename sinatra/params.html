@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -340,30 +367,31 @@
 
 <p>Now, sometimes the request path contains dynamic data.</p>
 
-<p>For example, the path of the URL <a href="https://rubygems.org/gems/middleman"><a href="https://rubygems.org/gems/middleman">https://rubygems.org/gems/middleman</a></a>
-is <code>/gems/middleman</code>. The path of the details page for the gem Rack on
-RubyGems.org is <code>/gems/rack</code>, the path for Sinatra is <code>/gems/sinatra</code>, and so
-on.</p>
+<p>For example, the path of the URL <a href="https://rubygems.org/gems/rack"><a href="https://rubygems.org/gems/rack">https://rubygems.org/gems/rack</a></a>
+is <code>/gems/rack</code>. The path of the details page for the gem Sinatra on
+RubyGems.org is <code>/gems/sinatra</code>, the path for Middleman is <code>/gems/middleman</code>,
+and so on.</p>
 
 <p>Obviously we don&rsquo;t want to hardcode (&ldquo;write out literally&rdquo;) all these names in
 our application code: We don&rsquo;t want to change our code for each and every new
-gem that is added. Instead we want to be able to express <em>&ldquo;a path that starts
-with <code>/gems</code> followed by another, second segment&rdquo;</em>.</p>
+gem that is added: At the time of this writing RubyGems.org has 122,037.
+Instead we want to be able to express <em>&ldquo;a path that starts with <code>/gems</code>
+followed by another, second segment&rdquo;</em>.</p>
 
-<p>In Sinatra we can do this by specifying pattern as a path. Sinatra will then
+<p>In Sinatra we can do this by specifying a pattern as a path. Sinatra will then
 match the pattern against the path, and see if it applies.</p>
 
 <p>Let&rsquo;s try that out.</p>
 
 <p>Add the following route (request handler) to your program, at the end of the
 file:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/hello/:name"</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/monstas/:name"</span> <span class="k">do</span>
   <span class="s2">"Hello </span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="si">}</span><span class="s2">!"</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>Restart your Sinatra application, and point your browser to
-<a href="http://localhost:4567/hello/monstas"><a href="http://localhost:4567/hello/monstas">http://localhost:4567/hello/monstas</a></a>.</p>
+<a href="http://localhost:4567/monstas/monstas"><a href="http://localhost:4567/monstas/monstas">http://localhost:4567/monstas/monstas</a></a>.</p>
 
 <p>How does this work?</p>
 
@@ -378,13 +406,13 @@ string here, and that we&rsquo;d like to call this string <code>name</code>.</p>
 given string from the path (i.e. from the URL) to it.</p>
 
 <p>When you point your browser to the URL
-<a href="http://localhost:4567/hello/Elizabeth"><a href="http://localhost:4567/hello/Elizabeth">http://localhost:4567/hello/Elizabeth</a></a>
+<a href="http://localhost:4567/monstas/Elizabeth"><a href="http://localhost:4567/monstas/Elizabeth">http://localhost:4567/monstas/Elizabeth</a></a>
 your application will say <em>&ldquo;Hello Elizabeth!&rdquo;</em>, when you go to
-<a href="http://localhost:4567/hello/Juliane"><a href="http://localhost:4567/hello/Juliane">http://localhost:4567/hello/Juliane</a></a>
+<a href="http://localhost:4567/monstas/Juliane"><a href="http://localhost:4567/monstas/Juliane">http://localhost:4567/monstas/Juliane</a></a>
 your application will say <em>&ldquo;Hello Juliane!&rdquo;</em>, and so on.</p>
 
 <p>Let&rsquo;s inspect the params hash, and return this string as the response body:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/hello/:name"</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/monstas/:name"</span> <span class="k">do</span>
   <span class="n">params</span><span class="p">.</span><span class="nf">inspect</span>
 <span class="k">end</span>
 </code></pre>
@@ -419,8 +447,10 @@ to the <code>params</code> hash.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

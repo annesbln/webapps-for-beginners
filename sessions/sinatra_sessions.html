@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -343,21 +370,26 @@
 tool or framework, supports sessions.</p>
 
 <p>A session is a way for a web application to set a cookie that persists
-arbitrary data across multiple HTTP requests.</p>
+an identifier across multiple HTTP requests, and then relate these requests
+to each other: If you&rsquo;ve signed in before the web application will be able to
+know that you&rsquo;re still the same user you&rsquo;ve identified as a couple requests
+earlier. If you&rsquo;ve done something else before, and something has been stored
+to your session, then the web application will be able to use it later.</p>
+
+<p>In our example we&rsquo;ll persist (store) a short confirmation message across two
+requests: The <code>POST</code> request will store the message, and redirect the browser
+to another URL. The browser will make that <code>GET</code> request, and we&rsquo;ll display
+the confirmation message.</p>
 
 <p>Let&rsquo;s have a look how this works.</p>
 
-<p>Say we&rsquo;d like to pass a message from our <code>post</code> route to the next request, saying
+<p>Say the message we&rsquo;d like to pass from our <code>POST</code> route to the next request is
 <em>&ldquo;Successfully stored the name [name]&rdquo;</em>. I.e. after storing the name to the
 file, we&rsquo;d like to pass a message to the <code>GET</code> request that the browser is
-going to be redirected to.</p>
+going to be redirected to later.</p>
 
-<p>We&rsquo;d only want to display this message once right after the redirection from
-the <code>post</code> route: when we reload the page it should be gone. This is called
-transient state, and a session is a great place to keep it.</p>
-
-<p>First, we need to enable the <code>:sessions</code> feature in Sinatra. You can do that
-by adding this line above of your routes:</p>
+<p>In order to make this work we first need to enable the <code>:sessions</code> feature in
+Sinatra. You can do that by adding this line above of your routes:</p>
 <pre class="highlight ruby"><code><span class="n">enable</span> <span class="ss">:sessions</span>
 </code></pre>
 
@@ -372,8 +404,10 @@ by adding this line above of your routes:</p>
 
 <p>Ok, cool.</p>
 
-<p>This will add a <code>Set-Cookie</code> header to the reponse which has a long, messy looking, encrypted
-string as a value.</p>
+<p>The <code>session</code> looks like a simple Ruby hash, but if we store something to it
+then Sinatra will set a cookie for us. It does so by sending a <code>Set-Cookie</code>
+header along the reponse. This header will have a long, messy looking,
+encrypted string as a value.</p>
 
 <p>In my browser it looks like this:</p>
 <pre class="highlight plaintext"><code>Set-Cookie: rack.session=BAh7CUkiD3Nlc3Npb25faWQGOgZFVEkiRWI4OTdhMDJlNDBkMDFlNjcxNWUw%0AZGI1ZWU5MzQ0YTQyMjAzYjFiZTE2YzYxNzgwMWQxYjI3NzhiOWNhYTQ4YzUG%0AOwBGSSIJY3NyZgY7AEZJIiU2ZjdjN2Y0ZmM0MTdmMGJkNjBkNmY5MmQ1NDEx%0ANGQ4ZgY7AEZJIg10cmFja2luZwY7AEZ7B0kiFEhUVFBfVVNFUl9BR0VOVAY7%0AAFRJIi03NGNlNDIxYTczNjMwZDY3MWViNTlkYzIzN2YyN2M5NGU3ZWU4NTRm%0ABjsARkkiGUhUVFBfQUNDRVBUX0xBTkdVQUdFBjsAVEkiLTA3NjBhNDRjMzU0%0AODIxMzJjZjIyNDQyYTBkODhjMDhiYjg1NTYyNTAGOwBGSSIIZm9vBjsARkki%0ACGJhcgY7AFQ%3D%0A; path=/; HttpOnly
@@ -387,19 +421,15 @@ session.</p>
 know is that we can now use this data in the next request (the <code>GET</code> request)
 like so:</p>
 <pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
-  <span class="vi">@message</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="ss">:message</span><span class="p">)</span>
+  <span class="vi">@message</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span>
   <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
   <span class="vi">@names</span> <span class="o">=</span> <span class="n">read_names</span>
   <span class="n">erb</span> <span class="ss">:monstas</span>
 <span class="k">end</span>
 </code></pre>
 
-<p>I.e. we delete the key <code>:message</code> from our session (which is something very
-similar to a Ruby hash).  Deleting it will return the value that was stored on
-this key, and we assign it to the instance variable <code>@message</code>, which makes it
-available to our template.</p>
-
-<p>That means we can now use the message in our view like so:</p>
+<p>I.e. we grab <code>:message</code> from our session, and stuff it into the instance variable <code>@message</code>.
+Doing so we can then disply it in our view:</p>
 <pre class="highlight erb"><code><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@message</span> <span class="cp">%&gt;</span>
   <span class="nt">&lt;p&gt;</span><span class="cp">&lt;%=</span> <span class="vi">@message</span> <span class="cp">%&gt;</span><span class="nt">&lt;/p&gt;</span>
 <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
@@ -408,9 +438,7 @@ available to our template.</p>
 <p>Let&rsquo;s try it out. Restart your application, and go to <a href="http://localhost:4567"><a href="http://localhost:4567">http://localhost:4567</a></a>.
 If you enter a name, and click submit you should then see something like this:</p>
 
-<p><img src="/assets/images/sessions_1-b5f60913.png"></p>
-
-<p>When you reload the page the message should be gone.</p>
+<p><img src="/assets/images/sessions_1-ba6cd233.png"></p>
 
 <p>How does this work?</p>
 
@@ -423,27 +451,89 @@ with the name <code>rack.session</code>, in the encrypted form that you saw abov
 which is a fancy way of saying it is turned into some kind of format that
 can be stored in text form. Sinatra (actually, Rack, under the hood) then also
 encrypts and signs this data, so it is safe to send it over the internet (in
-case we keep any sensitive data in it).</p>
+case we keep any sensitive data in it). Thus hackers cannot easily tamper
+with it, it is a shared secret between our web application (Sinatra) and us
+(our browser).</p>
 
 <p>Ok, so the <code>post</code> route includes the <code>Set-Cookie</code> header with this session
 cookie in its response, and sends it to the browser. The browser will, from
 now on, pass this cookie back to our application as part of every subsequent
-request.</p>
+request. That&rsquo;s how cookies work: once set, they&rsquo;ll be included into every
+request that is being made from now on &hellip; and our web application can use
+it.</p>
 
 <p>When our browser is now redirected to <code>GET</code> the same URL again, it passes the
 cookie, and Sinatra will, because we have the <code>:sessions</code> feature enabled,
-<em>deserialize</em> (i.e. decrypt and read) the session data, and put it into the
+<em>deserialize</em> (i.e. decrypt and read) the data, and put it back into the
 hash that is returned by the method <code>session</code>, so we can work with it.</p>
 
-<p>In our <code>get</code> route we now simply always delete the key <code>:message</code> from the
-session hash. Should anything be in there it will be assigned to the <code>@message</code>
-instance variable, and the view will display it. If nothing&rsquo;s stored on the
-session key, for example when we reload the page, then deleting the key will
-simply return nil, and nothing will be displayed in the view.</p>
+<p>In our <code>get</code> route, if we find something in <code>session[:message]</code> we will display
+it in the view. If nothing is stored on that key in the session then the view
+won&rsquo;t display anything either.</p>
 
 <p>Does that make sense?</p>
 
 <p>Awesome :)</p>
+
+<h2>Transient state</h2>
+
+<p>However, there&rsquo;s a little problem with our approach. Have you noticed?</p>
+
+<p>Let&rsquo;s recap what our application does:</p>
+
+<ul>
+<li>On the <code>GET /monstas</code> route we render a view that includes a form.</li>
+<li>This form, when submitted, makes a <code>POST</code> request to the same path <code>/monstas</code>, and includes the <code>name</code> variable.</li>
+<li>On the <code>POST /monstas</code> route we find the <code>name</code> data in the <code>params</code> hash.</li>
+<li>We store it to the file.</li>
+<li>We set the confirmation message to <code>session[:message]</code>.</li>
+<li>We redirect the browser to <code>GET /monstas</code>.</li>
+<li>The browser requests <code>GET /monstas</code>.</li>
+<li>We find the confirmation message on <code>session[:message]</code>.</li>
+<li>We display the message.</li>
+</ul>
+
+<p>This works great.</p>
+
+<p>However, the message is now stored in our session cookie. And that means that
+from now on, whenever you browse (make a <code>GET</code> request) to the path <code>/monstas</code>
+the browser will always include the same cookie (data) to the request. And our
+application will always find it, and always display the same confirmation
+message &hellip; even though we haven&rsquo;t actually added any new names this time.</p>
+
+<p>Instead, what we really want to do is display the confirmation message only
+once: on the <code>GET</code> request that is made right after the <code>POST</code> request
+redirected to <code>/monstas</code>. When we then reload the page (or close and reopen
+the browser and go to <code>/monstas</code> tomorrow) the confirmation message should
+be gone.</p>
+
+<p>Right?</p>
+
+<p>This is called &ldquo;transient state&rdquo;: State that is only there for a brief moment,
+and then goes away. And a session is a great place to keep it.</p>
+
+<p>So how can we fix that?</p>
+
+<p>All we have to do is delete the message from the session right before we
+display it:</p>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
+  <span class="vi">@message</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="ss">:message</span><span class="p">)</span>
+  <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+  <span class="vi">@names</span> <span class="o">=</span> <span class="n">read_names</span>
+  <span class="n">erb</span> <span class="ss">:monstas</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Deleting it from the <code>session</code> will return the value that was stored on this
+key, and we assign it to the instance variable <code>@message</code>, which makes it
+available to our template.</p>
+
+<p>In other words, if anything is stored on this key it will be assigned to the
+<code>@message</code> instance variable, and the view will display it. If nothing&rsquo;s stored
+on the key, then deleting the key will simply return nil, and nothing will be
+displayed in the view.</p>
+
+<p>Problem solved :)</p>
 
         <nav class="page-nav"><a class="prev" href="/sessions/cookies.html">
   Previous
@@ -456,8 +546,10 @@ simply return nil, and nothing will be displayed in the view.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

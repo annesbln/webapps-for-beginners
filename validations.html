@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -341,24 +368,35 @@
 <p>Our little application now already makes use of a bunch of things that you will
 regularly find in web applications.</p>
 
-<p>We have a form that posts to another route. The <code>post</code> route picks up the data,
-and stores it, then redirects to another route, which displays the data. We also
-use a session, and a query parameter to pass data from one route to another.</p>
+<p>We have a form that posts data to another route. The <code>post</code> route picks up the
+data, and stores it, then redirects to another route, which displays the data.
+We also use a session, and a query parameter to pass data from one route to
+another.</p>
 
-<p>However, we still are a little naive in accepting whatever data comes in to our
-<code>post</code> route: Do we want to store duplicate names? What if the same name is
-being submitted over and over again? And what if there&rsquo;s no name submitted at
-all?</p>
+<p>Pretty cool. You&rsquo;ll see a lot of these very same concepts in use when you start
+building your first Rails application. All of these things will work pretty
+much the same way in Rails. Except, you&rsquo;ve now built them manually yourself,
+so you know how this stuff works under the hood.</p>
 
-<p>What we really want to do is validate the incoming data (name), and only accept
-and store it when we find it&rsquo;s valid. If it&rsquo;s not, then we want to display a
-message to the user, and ask them to submit the form again.</p>
+<p>Let&rsquo;s look at one other concept that Rails helps with, too: Validating user
+input.</p>
+
+<p>If you look at our little application we still are a little naive in accepting
+whatever data comes in to our <code>post</code> route: We simply store whatever the user
+sends, whenever they send it.</p>
+
+<p>Do we really want to store duplicate names? What if the same name is being
+submitted over and over again? And what if there&rsquo;s no name submitted at all?</p>
+
+<p>What we really want to do is validate the incoming data (in our case the name),
+and only accept and store it when we find it&rsquo;s valid. If it&rsquo;s not, then we want
+to display a message to the user, and ask them to submit the form again.</p>
 
 <p>We could change our <code>post</code> route like so:</p>
 <pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
   <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
 
-  <span class="k">if</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">to_s</span><span class="p">.</span><span class="nf">empty?</span>
+  <span class="k">if</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">nil?</span> <span class="n">or</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">empty?</span>
     <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"You need to enter a name."</span>
   <span class="k">elsif</span> <span class="n">read_names</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="vi">@name</span><span class="p">)</span>
     <span class="n">session</span><span class="p">[</span><span class="ss">:message</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2"> is already included in our list."</span>
@@ -377,49 +415,61 @@ can try it out.</p>
 <p>The <code>if</code> statement first checks if the <code>@name</code> is empty. If it is we simply
 store a message to the session, and then redirect.</p>
 
-<p>Note that we call <code>to_s</code> (&ldquo;to string&rdquo;) on the <code>@name</code>. This is useful because
-there might not be any value stored on <code>params[&quot;name&quot;]</code>. In this case we&rsquo;d get
-<code>nil</code>, which does not know the method <code>empty?</code>. We therefore turn a potential
-<code>nil</code> value into an empty string first.  Of course, if there&rsquo;s a string stored
-on <code>params[:key]</code>, then <code>to_s</code> would just return the same string.</p>
+<p>Note the duplicate condition <code>@name.nil? or @name.empty?</code>. The name parameter
+could either be missing (and thus, be <code>nil</code>), or it could be an empty string,
+so we need to check both cases.</p>
 
-<p>The <code>if</code> statement then checks if the given <code>@name</code> already is included in the
-names in our file: the array returned by <code>read_names</code>. (We had implemented this
-method in order use it in our <code>get</code> route for displaying all the names, and now
-we can just re-use it here.) If we already have the name, then, again, we just
-add a message to the session, and redirect.</p>
+<p>This could be simplified to one condition like so:</p>
+<pre class="highlight ruby"><code>  <span class="k">if</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">to_s</span><span class="p">.</span><span class="nf">empty?</span>
+</code></pre>
+
+<p>If it&rsquo;s <code>nil</code>, then <code>nil.to_s</code> would return an empty string. If it&rsquo;s an empty
+string, then <code>&quot;&quot;.to_s</code> returns the same empty string again.</p>
+
+<p>The <code>if</code> statement then also checks if the given <code>@name</code> already is included in
+the names in our file: the array returned by <code>read_names</code>. If we already have
+the name, then, again, we just add a message to the session, and redirect.</p>
 
 <p>Only in the last case, when the name is not empty, and not already known,
 we do store it, and add the respective message to the session, and redirect.</p>
 
-<p>However, it&rsquo;s worth considering that this adds quite a bit of stuff to our
-route. So what if we extracted this to a validator class?</p>
+<p>Alright, this works.</p>
 
-<p>Let&rsquo;s implement a little Ruby class that hides some of the logic from the
-route. Here&rsquo;s how we could do it:</p>
+<p>However, it&rsquo;s worth considering that this adds quite a bit of stuff to our
+route. And if we have a lot of routes then that&rsquo;s a lot of code to add.</p>
+
+<p>So what if we extract this to a separate class?</p>
+
+<p>Extracting code to a class (or method) is a useful technique to keep your
+code clean and readable. The routes can focus on their job (passing data
+from the request to the view, reading data from our file, storing new
+data to the file etc), and the new class can focus on a different task:
+Finding out if the passed data is valid.</p>
+
+<p>So let&rsquo;s try that, and implement a little Ruby class that hides some of the
+logic from the route. Here&rsquo;s how we could do it:</p>
 <pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">NameValidator</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
     <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span><span class="p">.</span><span class="nf">to_s</span>
     <span class="vi">@names</span> <span class="o">=</span> <span class="n">names</span>
-    <span class="vi">@messages</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">valid?</span>
     <span class="n">validate</span>
-    <span class="vi">@messages</span><span class="p">.</span><span class="nf">empty?</span>
+    <span class="vi">@message</span><span class="p">.</span><span class="nf">nil?</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">message</span>
-    <span class="vi">@messages</span><span class="p">.</span><span class="nf">first</span>
+    <span class="vi">@message</span>
   <span class="k">end</span>
 
   <span class="kp">private</span>
 
     <span class="k">def</span> <span class="nf">validate</span>
       <span class="k">if</span> <span class="vi">@name</span><span class="p">.</span><span class="nf">empty?</span>
-        <span class="vi">@messages</span> <span class="o">&lt;&lt;</span> <span class="s2">"You need to enter a name"</span>
+        <span class="vi">@message</span> <span class="o">=</span> <span class="s2">"You need to enter a name."</span>
       <span class="k">elsif</span> <span class="vi">@names</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="vi">@name</span><span class="p">)</span>
-        <span class="vi">@messages</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2"> is already included in our list."</span>
+        <span class="vi">@message</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2"> is already included in our list."</span>
       <span class="k">end</span>
     <span class="k">end</span>
 <span class="k">end</span>
@@ -440,19 +490,34 @@ route. Here&rsquo;s how we could do it:</p>
 </code></pre>
 
 <p>This adds quite a bit of code that we need to figure out, and type. But it
-might be worth it: Our route is now much shorter, and way easier to understand
+seems worth it: Our route is now much shorter, and way easier to understand
 from just a quick look at it. We could move the <code>NameValidator</code> to a separate
 file.</p>
 
-<p>So this works. However, imagine we&rsquo;d have a much bigger form, with lots of
-fields. We&rsquo;d then need to pass all of these back to the <code>get</code> route by the
-way of appending all of them to the URL - otherwise this data would be lost
-and the user would have to re-enter it.</p>
+<p>Cool, this works great.</p>
 
-<p>For this reason modern web applications usually follow a different pattern.</p>
+<h2>Rerendering the form</h2>
 
-<p>Instead of redirecting the user when the submitted data is invalid, we would
-just re-render the same template right away, with the same data.</p>
+<p>However, imagine we&rsquo;d now have a much bigger form, with lots of fields. And
+we&rsquo;d validate each of these fields and have several validation messages.
+Imagine we&rsquo;d have like 20 form fields, and the user has made mistakes on 5 of
+them.</p>
+
+<p>We&rsquo;d want our application to display the same form again, and display the
+validation messages alongside with it. The original data should be, again,
+prefilled to the form, so the user does not have to type it all again.</p>
+
+<p>In order to preserve the form data that had been entered by the user we&rsquo;d
+need to append it all to the URL (as we do with the name in <code>&quot;/monstas?name=#{@name}&quot;</code>).
+And we&rsquo;d need to store all the validation messages to the session.</p>
+
+<p>This is a lot of stuff. And it actually also might break because URLs cannot be
+very long.</p>
+
+<p>For this reason modern web applications usually follow a different pattern:</p>
+
+<p>If the submitted data is invalid, instead of redirecting the user, we would
+simply re-render the same template right there, with the same data.</p>
 
 <p>Here&rsquo;s how we could do that:</p>
 <pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
@@ -471,8 +536,8 @@ just re-render the same template right away, with the same data.</p>
 <span class="k">end</span>
 </code></pre>
 
-<p>As you can see we now only store a message to the session, and redirect, if
-the given data is valid. If it&rsquo;s not we store the validation message to
+<p>As you can see we now only store a message to the session, and redirect, only
+if the given data is valid. If it&rsquo;s not then we store the validation message to
 the <code>@message</code> instance variable and render our template again.</p>
 
 <p>Cool. If you restart your application you can try how it works.</p>
@@ -498,12 +563,16 @@ applications, which is also used in Rails applications by default:</p>
 <ul>
 <li>There is an HTML form which is being retrieved via a <code>GET</code> request.</li>
 <li>This form posts to another route, which validates the submitted data.</li>
-<li>If the data is valid, it does something with it (in our case we store it).</li>
+<li>If the data is valid, it does something with it (in our case we store it) and
+redirects, passing a message via the session.</li>
 <li>If it&rsquo;s not valid, it renders an error message, as well as the form,
 with the form fields populated with the given data.</li>
 </ul>
 
-<p>Let&rsquo;s take this a step further and have a look at something that Rails
+<p>Make sure to remember this pattern. Maybe write it down to a cheatsheet,
+formulate it in your own words. Maybe try turning it into a comic.</p>
+
+<p>Next, let&rsquo;s take this a step further and have a look at something that Rails
 calls &ldquo;resources&rdquo;.</p>
 
         <nav class="page-nav"><a class="prev" href="/sessions/sinatra_sessions.html">
@@ -517,8 +586,10 @@ calls &ldquo;resources&rdquo;.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

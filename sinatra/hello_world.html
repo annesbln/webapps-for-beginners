@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -363,7 +390,8 @@ something like this:</p>
 </code></pre>
 
 <p>Again, there are lots of version numbers, that we can ignore, and it
-also tells us the port that it&rsquo;s running on.</p>
+also tells us the port that it&rsquo;s running on. This time it&rsquo;s <code>4567</code>. For some
+reason Sinatra finds it important to use a different port number <code>¯\_(ツ)_/¯</code></p>
 
 <p>So let&rsquo;s point the browser to <a href="http://localhost:4567"><a href="http://localhost:4567">http://localhost:4567</a></a>.</p>
 
@@ -373,9 +401,9 @@ also tells us the port that it&rsquo;s running on.</p>
 
 <p>That was easy, wasn&rsquo;t it.</p>
 
-<p>If you&rsquo;ve read the chapters about <a href="../rack.html">Rack</a>): Sinatra uses Rack under
-the hood, but it deals with the nitty gritty details of looking at the
-<code>REQUEST_METHOD</code> and <code>REQUEST_PATH</code> for you.</p>
+<p>If you&rsquo;ve read the chapters about <a href="../rack.html">Rack</a> it is interesting to know
+that Sinatra uses Rack under the hood, but it deals with the nitty gritty
+details of looking at the <code>REQUEST_METHOD</code> and <code>REQUEST_PATH</code> for you.</p>
 
 <p>It allows you to use the methods <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code>
 with a path argument, and simply specify a block that will be called whenever a
@@ -402,8 +430,10 @@ just assumes you want that too, unless you specify something else.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

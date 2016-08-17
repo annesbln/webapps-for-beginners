@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -354,7 +381,7 @@ the newline character <code>&quot;\n&quot;</code> in order to get our names as a
 <span class="k">end</span>
 </code></pre>
 
-<p>However, this would break if no file with this name exists yet. So let&rsquo;s add 
+<p>However, this would break if no file with this name exists yet. So let&rsquo;s add
 a little safeguard, and return an empty array if the file does not exist:</p>
 <pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">read_names</span>
   <span class="k">return</span> <span class="p">[]</span> <span class="k">unless</span> <span class="no">File</span><span class="p">.</span><span class="nf">exist?</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">)</span>
@@ -363,7 +390,8 @@ a little safeguard, and return an empty array if the file does not exist:</p>
 </code></pre>
 
 <p>Does this make sense? If the file does not exist we return an empty array <code>[]</code>.
-If it exists we read it, and split the content into lines.</p>
+If it exists we read it, and split the content into lines. Even if the file
+exists, but it is empty, we&rsquo;ll still get an array.</p>
 
 <p>Also, let&rsquo;s store the names on an instance variable in our route, so we can
 then use it in the template later:</p>
@@ -385,9 +413,13 @@ then use it in the template later:</p>
 <span class="nt">&lt;ul&gt;</span>
 </code></pre>
 
-<p><img src="/assets/images/storing_data_1-a05fb498.png"></p>
+<p><img src="/assets/images/storing_data_1-08f6ad93.png"></p>
 
 <p>Wheeeee! Pretty cool.</p>
+
+<p>The tag <code>ul</code> means &ldquo;unordered list&rdquo;, and it is supposed to have one or many
+<code>li</code> tags, which means &ldquo;list item&rdquo;. Yeah, HTML tag names are a little weird,
+their naming dates back a while.</p>
 
         <nav class="page-nav"><a class="prev" href="/storing_data/storing_name.html">
   Previous
@@ -400,8 +432,10 @@ then use it in the template later:</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

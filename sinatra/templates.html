@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -349,7 +376,7 @@ variables used in the template known as local variables in our route:</p>
 <pre class="highlight ruby"><code><span class="nb">require</span> <span class="s2">"sinatra"</span>
 <span class="nb">require</span> <span class="s2">"erb"</span>
 
-<span class="n">get</span> <span class="s1">'/hello/:name'</span> <span class="k">do</span>
+<span class="n">get</span> <span class="s1">'/monstas/:name'</span> <span class="k">do</span>
   <span class="no">ERB</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"&lt;h1&gt;Hello &lt;%= params[:name] %&gt;&lt;/h1&gt;"</span><span class="p">).</span><span class="nf">result</span><span class="p">(</span><span class="nb">binding</span><span class="p">)</span>
 <span class="k">end</span>
 </code></pre>
@@ -363,14 +390,14 @@ as in our examples in the chapters about <a href="/erb.html">ERB</a></p>
 <p>If you restart the server, and reload the page in your browser, it should now
 look like this:</p>
 
-<p><img src="/assets/images/sinatra_2-731564c1.png"></p>
+<p><img src="/assets/images/sinatra_2-5a50e4bb.png"></p>
 
-<p>Awesome, we&rsquo;re now serving HTML.</p>
+<p>Awesome, we&rsquo;re now serving HTML, not just plain text.</p>
 
 <p>However, Sinatra also has built-in support for ERB templates (&ldquo;views&rdquo;). We can
 achieve exactly the same thing without spelling out the
 <code>ERB.new(...).result(binding)</code> noise:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s1">'/hello/:name'</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s1">'/monstas/:name'</span> <span class="k">do</span>
   <span class="n">erb</span> <span class="s2">"&lt;h1&gt;Hello &lt;%= name %&gt;&lt;/h1&gt;"</span><span class="p">,</span> <span class="p">{</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span> <span class="p">}</span> <span class="p">}</span>
 <span class="k">end</span>
 </code></pre>
@@ -383,7 +410,14 @@ options. If we specify a key <code>:locals</code> and give it another hash, then
 will make each key/value pair on this hash available as <em>local</em> variables (thus
 &ldquo;locals&rdquo;) in our ERB template.</p>
 
-<p>We think that&rsquo;s much nicer.</p>
+<p>Of course, since <code>params</code> already is a hash, and it already has the key <code>name</code>
+defined, we can also just say:</p>
+<pre class="highlight ruby"><code><span class="n">get</span> <span class="s1">'/monstas/:name'</span> <span class="k">do</span>
+  <span class="n">erb</span> <span class="s2">"&lt;h1&gt;Hello &lt;%= name %&gt;&lt;/h1&gt;"</span><span class="p">,</span> <span class="p">{</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="n">params</span> <span class="p">}</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Nice, isn&rsquo;t it.</p>
 
         <nav class="page-nav"><a class="prev" href="/sinatra/params.html">
   Previous
@@ -396,8 +430,10 @@ will make each key/value pair on this hash available as <em>local</em> variables
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

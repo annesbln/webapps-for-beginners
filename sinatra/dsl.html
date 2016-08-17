@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -350,7 +377,7 @@ tool can be applied.</p>
 
 <p>What does that mean?</p>
 
-<p>When you think about a hammer as a concept, then the domain the is relevant to
+<p>When you think about a hammer as a concept, then the domain it is relevant to
 is &ldquo;building physical things&rdquo;. In contrast, it is completely irrelevant to the
 domain of mathmatics. Likewise, the concept of an operating system, is
 something that is relevant in the domain of using computers, while it is
@@ -374,15 +401,15 @@ can be checked out, which will place an order.&rdquo;</em></p>
 describe a piece of code or library that provides classes and methods that
 allow us to &ldquo;speak about them&rdquo;, or implement them, in the form of code.</p>
 
-<p>The problem domain that Sinatra lives in is building web applications which
-speak HTTP:</p>
+<p>The problem domain that Sinatra lives in is building web applications. And web
+applications which &ldquo;speak&rdquo; HTTP with browsers.</p>
 
-<p>It has methods like <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code>, which you can use in
-order to describe how your application responds to HTTP requests. It also has
-methods like <code>headers</code>, <code>session</code>, <code>cookies</code>, and other things that relate to
-concepts from HTTP.</p>
+<p>It therefor has methods like, for example, <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code>.
+You can use these methods in order to describe how your application responds to
+HTTP requests. It also has methods like <code>headers</code>, <code>session</code>, <code>cookies</code>, and
+other things that relate to concepts from HTTP.</p>
 
-<p>So, instead of writing code like this:</p>
+<p>So, instead of writing verbose code like this:</p>
 <pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
   <span class="k">if</span> <span class="nb">method</span> <span class="o">==</span> <span class="s2">"GET"</span>
     <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span> <span class="s2">"Content-Type"</span> <span class="o">=&gt;</span> <span class="s2">"text/html"</span> <span class="p">},</span> <span class="p">[</span><span class="s2">"You have requested the path </span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">, using GET"</span><span class="p">]]</span>
@@ -402,8 +429,8 @@ concepts from HTTP.</p>
 <span class="k">end</span>
 </code></pre>
 
-<p>&hellip; which uses a &ldquo;language&rdquo; (i.e. methods provided by Sinatra) that is specific
-to the domain HTTP.</p>
+<p>As you can see this code uses a &ldquo;language&rdquo; (i.e. methods provided by Sinatra)
+that is specific to the domain HTTP.</p>
 
 <p>Does that make sense?</p>
 
@@ -424,8 +451,10 @@ terms that are specific to the given problem domain.
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

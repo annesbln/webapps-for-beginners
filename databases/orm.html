@@ -19,7 +19,7 @@
     <nav class="page-nav"><a class="prev" href="/databases/sqlite.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/databases/migrations.html">
+    <nav class="page-nav"><a class="next" href="/migrations.html">
   Next
 </a></nav>
 
@@ -98,22 +98,22 @@
   </li>
   <li class="directory">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li>
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory expanded">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -338,6 +365,8 @@
         <nav class="menu"><a href="#"></a></nav>
         <h1>Object Relational Mappers</h1>
 
+<p><em>Map database contents to Ruby objects</em></p>
+
 <p>There are lots of reasons, most of them historical, why SQL reads weird, and
 it&rsquo;s quite unlikely that SQL will become a more pleasant language, or replaced
 anytime soon.</p>
@@ -376,7 +405,7 @@ objects and vice versa.</p>
 <tr>
 <td>1</td>
 <td>Anja</td>
-<td>2013-06-24</td>
+<td>2013-06-23</td>
 </tr>
 <tr>
 <td>2</td>
@@ -394,31 +423,51 @@ objects and vice versa.</p>
 <pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Member</span> <span class="c1"># we'd need to somehow include the ORM functionality</span>
 <span class="k">end</span>
 
-<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Find one member</span>
+
+<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
 
-<span class="n">member</span><span class="p">.</span><span class="nf">joined_at</span> <span class="o">=</span> <span class="s1">'2013-06-23'</span>
+<span class="c1"># Change the member's joined_on date:</span>
+
+<span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span> <span class="o">=</span> <span class="s1">'2013-06-24'</span>
 <span class="n">member</span><span class="p">.</span><span class="nf">save</span>
 
+<span class="nb">puts</span>
 <span class="nb">puts</span> <span class="s2">"Correction!"</span>
-
-<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
+<span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="ss">id: </span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
+
+<span class="c1"># Find several members based on their joined_on date:</span>
+
+<span class="nb">puts</span>
+<span class="nb">puts</span> <span class="s2">"Who joined on 2013-06-24?"</span>
+<span class="n">members</span> <span class="o">=</span> <span class="no">Member</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">joined_on: </span><span class="s1">'2013-06-24'</span><span class="p">)</span>
+<span class="n">members</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">member</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">name</span><span class="si">}</span><span class="s2"> has joined on </span><span class="si">#{</span><span class="n">member</span><span class="p">.</span><span class="nf">joined_on</span><span class="si">}</span><span class="s2">."</span>
+<span class="k">end</span>
 </code></pre>
 
 <p>And this would output:</p>
-<pre class="highlight plaintext"><code>Anja has joined on 2013-06-24.
+<pre class="highlight plaintext"><code>Anja has joined on 2013-06-23.
+
 Correction!
-Anja has joined on 2013-06-23.
+Anja has joined on 2013-06-24.
+
+Who joined on 2013-06-24?
+Anja has joined on 2013-06-24.
+Carla has joined on 2013-06-24.
 </code></pre>
 
 <p>Of course the details of this Ruby code might vary, depending on the concrete
-ORM tool that we are using. But the basic idea is that we can use Ruby classes
-and objects to retrieve some data from the database (as in <code>Member.where(id:
-1)</code>), which would then appear in our application as a normal Ruby object. We
-can call methods to look up fields (such as in <code>member.name</code>, which returns the
-value from the <code>name</code> column).  And we can use the same object to modify, and
-save the data back to the database.</p>
+ORM tool that we are using.</p>
+
+<p>But the basic idea is that we can use Ruby classes and objects to retrieve some
+data from the database (as in <code>Member.find(id: 1)</code>), which would then appear in
+our application as a normal Ruby object. We can call methods to look up fields
+(such as in <code>member.name</code>, which returns the value from the <code>name</code> column).
+And we can use the same object to modify, and save the data back to the
+database.</p>
 
 <p>Two widely used ORMs in Ruby are <a href="https://github.com/rails/rails/tree/master/activerecord">ActiveRecord</a>,
 which is part of Rails, and <a href="https://github.com/jeremyevans/sequel">Sequel</a>,
@@ -435,7 +484,7 @@ can later compare them.</p>
         <nav class="page-nav"><a class="prev" href="/databases/sqlite.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/databases/migrations.html">
+        <nav class="page-nav"><a class="next" href="/migrations.html">
   Next
 </a></nav>
       </article>
@@ -443,8 +492,10 @@ can later compare them.</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>

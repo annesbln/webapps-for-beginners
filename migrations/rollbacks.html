@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Routes | Webapps for Beginners</title>
+    <title>Rollbacks | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
-    <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+    <nav class="page-nav"><a class="prev" href="/migrations/incremental_changes.html">
   Previous
 </a></nav>
-    <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+    <nav class="page-nav"><a class="next" href="/migrations/tools.html">
   Next
 </a></nav>
 
@@ -118,7 +118,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory expanded">
+  <li class="directory">
     <a href="/sinatra.html">
       Sinatra
     </a>
@@ -138,7 +138,7 @@
           Your first Sinatra app
         </a>
       </li>
-      <li class="active">
+      <li>
         <a href="/sinatra/routes.html">
           Routes
         </a>
@@ -295,7 +295,7 @@
       </li>
     </ul>
   </li>
-  <li class="directory">
+  <li class="directory expanded">
     <a href="/migrations.html">
       Migrations
     </a>
@@ -310,7 +310,7 @@
           Incremental Changes
         </a>
       </li>
-      <li>
+      <li class="active">
         <a href="/migrations/rollbacks.html">
           Rollbacks
         </a>
@@ -363,47 +363,47 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Routes</h1>
+        <h2>Incremental rollbacks</h2>
 
-<p>In Sinatra calls to methods like <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code> are called
-<em>routes</em>. They take a path, and a block that handles a request.</p>
+<p>So far you&rsquo;ve learned how to, on a conceptual level, keep track of incremental
+changes to your database structure. You learned how to store such changes in
+files that can be shared, and, when executed will change the database structure
+one step after another.</p>
 
-<p>What&rsquo;s up with that term?</p>
+<p>That&rsquo;s pretty useful.</p>
 
-<p>The request is being picked up by the webserver, and then <em>routed</em> to a piece
-of code that handles the request, and specifies the response. They&rsquo;re like the
-info desk at a shopping mall: You (as an HTTP request) walk up to them, and
-tell them <code>GET /something</code>. They&rsquo;ll route (send) you to a certain shop on a
-certain floor where you can find what you&rsquo;re after.</p>
+<p>However, there&rsquo;s more to migrations.</p>
 
-<p>So, this would be three Sinatra routes:</p>
-<pre class="highlight ruby"><code><span class="n">get</span> <span class="s2">"/"</span> <span class="k">do</span>
-  <span class="s2">"OMG, hello Ruby Monstas!"</span>
-<span class="k">end</span>
+<p>What if we make a change to our database structure, apply it to our
+&ldquo;production&rdquo; application (i.e. the one that is publicly running on the
+internet, and actively used by our users), and then notice we&rsquo;ve made a
+mistake? We&rsquo;d then need a way to quickly roll back our change. How would we do
+that?</p>
 
-<span class="n">get</span> <span class="s2">"/signup"</span> <span class="k">do</span>
-  <span class="s2">"Here you can sign up for the next beginners course."</span>
-<span class="k">end</span>
+<p>This is why we would, per change (or per &ldquo;migration&rdquo;), not only define a way
+to <em>apply</em> a certain change. We would also define a way to roll it back, i.e.
+undo it.</p>
 
-<span class="n">post</span> <span class="s2">"/signin"</span> <span class="k">do</span>
-  <span class="c1"># do something to sign in the user</span>
-<span class="k">end</span>
-</code></pre>
+<p>With our naive, homegrown example migrations system, where we store plain
+SQL in files, we could do this by using file names like <code>db-change-1-up.sql</code>
+and <code>db-change-2-down.sql</code>.</p>
 
-<p>When a request comes in Sinatra will look at the request method and path, and
-match it against the first route:</p>
+<p>In the terminology of migrations the terms <code>up</code> and <code>down</code> are used to describe
+changes that are <em>applied</em> and <em>undone</em>: Migrating <em>up</em> means applying a
+change, and migrating <em>down</em> means undoing a change (rolling it back).</p>
 
-<ul>
-<li>If it matches it will run (call) the block and return a response to the
-browser.</li>
-<li>If it does not match, it will look at the next route, and so on.</li>
-<li>If no route matches then Sinatra responds with a <code>404 Not Found</code>.</li>
-</ul>
+<p>This is because traditionally migrations (changes) have been numbered sequentially,
+just as we do this in our example. That means applying a new change migrates
+the database &ldquo;up&rdquo; to a higher verion (change) number. E.g. if we&rsquo;d apply our
+change <code>db-change-up-3.sql</code> we&rsquo;d &ldquo;migrate up to version 3&rdquo;. If we then undo it
+we &ldquo;migrate down from version 3&rdquo;.</p>
 
-        <nav class="page-nav"><a class="prev" href="/sinatra/hello_world.html">
+<p>Does this make sense?</p>
+
+        <nav class="page-nav"><a class="prev" href="/migrations/incremental_changes.html">
   Previous
 </a></nav>
-        <nav class="page-nav"><a class="next" href="/sinatra/params.html">
+        <nav class="page-nav"><a class="next" href="/migrations/tools.html">
   Next
 </a></nav>
       </article>

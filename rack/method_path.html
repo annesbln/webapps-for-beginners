@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="BEd2YAbpSQrRqU2-5wUifTTzvqTMGLLE269b0JZTfCs" />
 
-    <title>Bonus: Method and Path | Webapps for Beginners</title>
+    <title>Method and Path | Webapps for Beginners</title>
 
     <link href="../assets/stylesheets/monstas-4fb1ecb5.css" rel="stylesheet" type="text/css" />
   </head>
@@ -98,22 +98,22 @@
   </li>
   <li class="directory expanded">
     <a href="/rack.html">
-      Bonus: Rack
+      Rack
     </a>
     <ul>
       <li>
         <a href="/rack/hello_world.html">
-          Bonus: Your first Rack app
+          Your first Rack app
         </a>
       </li>
       <li>
         <a href="/rack/rack_env.html">
-          Bonus: The Rack Env
+          The Rack Env
         </a>
       </li>
       <li class="active">
         <a href="/rack/method_path.html">
-          Bonus: Method and Path
+          Method and Path
         </a>
       </li>
     </ul>
@@ -261,6 +261,11 @@
           Faking HTTP verbs
         </a>
       </li>
+      <li>
+        <a href="/resources/writing_resources.html">
+          Writing resources
+        </a>
+      </li>
     </ul>
   </li>
   <li class="directory">
@@ -288,9 +293,31 @@
           Object Relational Mappers
         </a>
       </li>
+    </ul>
+  </li>
+  <li class="directory">
+    <a href="/migrations.html">
+      Migrations
+    </a>
+    <ul>
       <li>
-        <a href="/databases/migrations.html">
-          Migrations
+        <a href="/migrations/database_structure.html">
+          Database Structure
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/incremental_changes.html">
+          Incremental Changes
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/rollbacks.html">
+          Rollbacks
+        </a>
+      </li>
+      <li>
+        <a href="/migrations/tools.html">
+          Tools
         </a>
       </li>
     </ul>
@@ -336,15 +363,15 @@
       </nav>
       <article>
         <nav class="menu"><a href="#"></a></nav>
-        <h1>Bonus: Method and Path</h1>
+        <h1>Method and Path</h1>
 
 <p>We saw that the <code>env</code> hash that Rack passes to the method <code>call</code> contains the
-keys <code>REQUEST_METHOD</code> and <code>REQUEST_PATH</code>.</p>
+keys <code>REQUEST_METHOD</code> and <code>PATH_INFO</code>.</p>
 
 <p>Let&rsquo;s modify our app a little so we can make use of it:</p>
 <pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Application</span>
   <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="n">handle_request</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">'REQUEST_METHOD'</span><span class="p">],</span> <span class="n">env</span><span class="p">[</span><span class="s1">'REQUEST_PATH'</span><span class="p">])</span>
+    <span class="n">handle_request</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">'REQUEST_METHOD'</span><span class="p">],</span> <span class="n">env</span><span class="p">[</span><span class="s1">'PATH_INFO'</span><span class="p">])</span>
   <span class="k">end</span>
 
   <span class="kp">private</span>
@@ -370,15 +397,19 @@ keys <code>REQUEST_METHOD</code> and <code>REQUEST_PATH</code>.</p>
 <p>Reading the code closely, do you understand what it does, and why?</p>
 
 <p>We have changed the method <code>call</code> to extract the values for the keys
-<code>REQUEST_METHOD</code> and <code>REQUEST_PATH</code>. And we then pass these two values to a new
-method <code>handle_request</code>, which checks the <code>method</code>:</p>
+<code>REQUEST_METHOD</code> and <code>PATH_INFO</code>. And we then pass these two values to a new
+method <code>handle_request</code>, which checks the request <code>method</code>. Keep in mind that
+<code>method</code> here is just a variable name that refers to the HTTP concept of a
+&ldquo;request method&rdquo;.  This, of course, is not the same as a Ruby method, it&rsquo;s just
+a variable that will hold a string such as <code>GET</code>, <code>POST</code> depending on the HTTP
+request.</p>
 
 <ul>
-<li><p>If it&rsquo;s a <code>GET</code> request, then we call another method <code>get</code>, passing the <code>path</code>.
+<li><p>If <code>method</code> is <code>GET</code>, then we call another method <code>get</code>, passing the <code>path</code>.
 The method <code>get</code> complies with Rack&rsquo;s convention for returning a response: It
 returns an array that has the response status, headers, and a body. We&rsquo;ve
 changed the body a little bit so it displays the <code>path</code> that was requested.</p></li>
-<li><p>If it&rsquo;s not a <code>GET</code> request, then we call another method <code>method_not_allowed</code>.
+<li><p>If <code>method</code> is not <code>GET</code>, then we call another method <code>method_not_allowed</code>.
 This method also complies with Rack&rsquo;s convention, but returns a different
 response. This time we use the status code <code>405</code> which means exactly this:
 <em>&ldquo;Method Not Allowed&rdquo;</em>. Our little application just does not support any other
@@ -432,8 +463,10 @@ HTTP requests) you can try this:</p>
 
     <footer>
       <ul>
-        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
         <li><a href="http://rubymonstas.org">Ruby Monstas</a></li>
+        <li><a href="http://ruby-for-beginners.rubymonstas.org">Ruby For Beginners</a></li>
+        <li><a href="http://webapps-for-beginners.rubymonstas.org">Webapps For Beginners</a></li>
+        <li><a href="http://testing-for-beginners.rubymonstas.org">Testing For Beginners</a></li>
         <li><a href="mailto:ruby.monsters@gmail.com">Email</a></li>
         <li><a href="https://twitter.com/rubymonsters">Twitter</a></li>
         <li><a href="https://github.com/rubymonsters">GitHub</a></li>
