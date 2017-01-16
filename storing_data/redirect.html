@@ -400,7 +400,7 @@ include (&ldquo;render&rdquo;) the name into the HTML page:</p>
 <pre class="highlight ruby"><code><span class="n">post</span> <span class="s2">"/monstas"</span> <span class="k">do</span>
   <span class="vi">@name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>
   <span class="n">store_name</span><span class="p">(</span><span class="s2">"names.txt"</span><span class="p">,</span> <span class="vi">@name</span><span class="p">)</span>
-  <span class="n">redirect</span> <span class="s2">"/monstas?name=</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+  <span class="n">redirect</span> <span class="s2">"/monstas?name=</span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">"</span>
 <span class="k">end</span>
 </code></pre>
 

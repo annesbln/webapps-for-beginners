@@ -408,7 +408,7 @@ Sinatra. You can do that by adding this line above of your routes:</p>
 <p>The <code>session</code> looks like a simple Ruby hash, but if we store something to it
 then Sinatra will set a cookie for us. It does so by sending a <code>Set-Cookie</code>
 header along the reponse. This header will have a long, messy looking,
-encrypted string as a value.</p>
+encoded string as a value.</p>
 
 <p>In my browser it looks like this:</p>
 <pre class="highlight plaintext"><code>Set-Cookie: rack.session=BAh7CUkiD3Nlc3Npb25faWQGOgZFVEkiRWI4OTdhMDJlNDBkMDFlNjcxNWUw%0AZGI1ZWU5MzQ0YTQyMjAzYjFiZTE2YzYxNzgwMWQxYjI3NzhiOWNhYTQ4YzUG%0AOwBGSSIJY3NyZgY7AEZJIiU2ZjdjN2Y0ZmM0MTdmMGJkNjBkNmY5MmQ1NDEx%0ANGQ4ZgY7AEZJIg10cmFja2luZwY7AEZ7B0kiFEhUVFBfVVNFUl9BR0VOVAY7%0AAFRJIi03NGNlNDIxYTczNjMwZDY3MWViNTlkYzIzN2YyN2M5NGU3ZWU4NTRm%0ABjsARkkiGUhUVFBfQUNDRVBUX0xBTkdVQUdFBjsAVEkiLTA3NjBhNDRjMzU0%0AODIxMzJjZjIyNDQyYTBkODhjMDhiYjg1NTYyNTAGOwBGSSIIZm9vBjsARkki%0ACGJhcgY7AFQ%3D%0A; path=/; HttpOnly
@@ -436,7 +436,7 @@ Doing so we can then disply it in our view:</p>
 <span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
 </code></pre>
 
-<p>Let&rsquo;s try it out. Restart your application, and go to <a href="http://localhost:4567"><a href="http://localhost:4567">http://localhost:4567</a></a>.
+<p>Let&rsquo;s try it out. Restart your application, and go to <a href="http://localhost:4567/monstas"><a href="http://localhost:4567/monstas">http://localhost:4567/monstas</a></a>.
 If you enter a name, and click submit you should then see something like this:</p>
 
 <p><img src="/assets/images/sessions_1-ba6cd233.png"></p>
@@ -446,7 +446,7 @@ If you enter a name, and click submit you should then see something like this:</
 <p>In our <code>post</code> route we store the message to the session hash. This is
 something Sinatra provides to us as developers. When we enable this
 feature Sinatra will, after every request, store this hash to a cookie
-with the name <code>rack.session</code>, in the encrypted form that you saw above.</p>
+with the name <code>rack.session</code>, in the encoded form that you saw above.</p>
 
 <p>We say the hash is being <a href="http://en.wikipedia.org/wiki/Serialization">serialized</a>,
 which is a fancy way of saying it is turned into some kind of format that
